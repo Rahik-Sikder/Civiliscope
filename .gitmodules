@@ -1,0 +1,3 @@
+[submodule "backend/data-ingestion/congress"]
+	path = backend/data-ingestion/congress
+	url = https://github.com/unitedstates/congress-legislators.git

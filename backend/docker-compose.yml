@@ -3,13 +3,14 @@ services:
   db:
     image: postgres:15
     environment:
-      POSTGRES_DB: senatedb
+      POSTGRES_DB: congress_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
 
   backend:
+    container_name: civiscope-backend 
     build: .
     ports:
       - "5050:5000"
