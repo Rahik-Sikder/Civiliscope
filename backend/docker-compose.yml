@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: senatedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: .
+    ports:
+      - "5050:5000"
+    env_file:
+      - .env
+    depends_on:
+      - db

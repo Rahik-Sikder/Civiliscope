@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+
+# Node/React (if frontend lives in repo)
+node_modules/
+dist/
+build/
+
+# Virtualenv / pipenv
+.venv/
+.env
+.flaskenv
+
+# Docker
+*.log
+*.pid
+*.sock
+.docker/
+*.tar
+
+# VS Code, PyCharm, etc.
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Optional
+data-ingestion/__pycache__/
+
+# Firebase secrets (if stored locally)
+firebase-adminsdk.json
