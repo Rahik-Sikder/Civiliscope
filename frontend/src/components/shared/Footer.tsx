@@ -1,9 +1,9 @@
 import React from 'react';
 
 export default function Footer() {
-  return (
-    <footer className="bg-gray-100 text-center py-4 mt-12 border-t">
-      <p className="text-sm text-gray-600">© 2025 Civiscope. Built with ❤️ by Rahik.</p>
-    </footer>
-  );
+    return (
+        <footer className="footer footer-center p-4 bg-base-100 text-base-content mt-12">
+            <p className="text-sm">© 2025 Civiliscope. Built by Rahik Sikder.</p>
+        </footer>
+    );
 }

@@ -1,8 +1,8 @@
 
 
-# 🏛️ Civiscope
+# 🏛️ Civiliscope
 
-**Civiscope** is a full-stack web app for visualizing the composition of the U.S. Congress — one seat at a time.
+**Civiliscope** is a full-stack web app for visualizing the composition of the U.S. Congress — one seat at a time.
 
 Hover over Senate seats to learn more about each legislator, with data sourced from [congress-legislators](https://github.com/unitedstates/congress-legislators). Easily extendable to the House of Representatives.
 

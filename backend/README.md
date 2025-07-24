@@ -1,8 +1,8 @@
 ## `backend/README.md`
 
-# Civiscope Backend
+# Civiliscope Backend
 
-The backend service powering Civiscope — a visual and interactive platform for exploring U.S. Congressional seats. This Flask-based API exposes structured data on Senators and Representatives using a PostgreSQL database and data from the [congress-legislators](https://github.com/unitedstates/congress-legislators) project.
+The backend service powering Civiliscope — a visual and interactive platform for exploring U.S. Congressional seats. This Flask-based API exposes structured data on Senators and Representatives using a PostgreSQL database and data from the [congress-legislators](https://github.com/unitedstates/congress-legislators) project.
 
 ---
 

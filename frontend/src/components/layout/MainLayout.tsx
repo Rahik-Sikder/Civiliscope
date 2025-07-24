@@ -1,6 +1,6 @@
-import React, { type ReactNode } from 'react';
-import Header from '../shared/Header.tsx';
-import Footer from '../shared/Footer.tsx';
+import React, { type ReactNode } from "react";
+import Header from "../shared/Header";
+import Footer from "../shared/Footer";
 
 interface Props {
   children: ReactNode;
@@ -8,9 +8,11 @@ interface Props {
 
 export default function MainLayout({ children }: Props) {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen flex flex-col bg-base-200">
       <Header />
-      <main className="flex-grow container mx-auto px-4">{children}</main>
+      <section className="flex-grow flex flex-col gap-4 items-center justify-center">
+          {children}
+      </section>
       <Footer />
     </div>
   );

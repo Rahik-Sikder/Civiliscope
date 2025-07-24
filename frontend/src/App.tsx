@@ -2,5 +2,10 @@ import React from 'react';
 import Router from './router';
 
 export default function App() {
-  return <Router />;
+
+  return (
+    <div data-theme="retro">
+       <Router />
+    </div>
+  );
 }
