@@ -1,46 +1,135 @@
 @import "tailwindcss";
-@plugin "daisyui";
-@plugin "@tailwindcss/typography";
 
-@plugin "daisyui/theme" {
-  name: "retro";
-  default: true;
-  prefersdark: false;
-  color-scheme: "light";
-  --color-base-100: oklch(91.637% 0.034 90.515);
-  --color-base-200: oklch(88.272% 0.049 91.774);
-  --color-base-300: oklch(84.133% 0.065 90.856);
-  --color-base-content: oklch(0.498 0.1851 13.73);
-  --color-primary: oklch(0.498 0.1851 13.73);
-  --color-primary-content: oklch(98% 0.003 247.858);
-  --color-secondary: oklch(0.3169 0.0952 256.22);
-  --color-secondary-content: oklch(100% 0 0);
-  --color-accent: oklch(1 0 0);
-  --color-accent-content: oklch(55% 0.046 257.417);
-  --color-neutral: oklch(70% 0 0);
-  --color-neutral-content: oklch(100% 0 0);
-  --color-info: oklch(60% 0.126 221.723);
-  --color-info-content: oklch(100% 0 0);
-  --color-success: oklch(51% 0.096 186.391);
-  --color-success-content: oklch(96% 0.059 95.617);
-  --color-warning: oklch(70% 0.04 256.788);
-  --color-warning-content: oklch(96% 0.059 95.617);
-  --color-error: oklch(70% 0.191 22.216);
-  --color-error-content: oklch(40% 0.123 38.172);
-  --radius-selector: 0.5rem;
-  --radius-field: 0.5rem;
-  --radius-box: 1rem;
-  --size-selector: 0.28125rem;
-  --size-field: 0.28125rem;
-  --border: 1px;
-  --depth: 0;
-  --noise: 0;
+/* Patriotic Dark Theme - Modern & Sleek */
+:root {
+  --patriot-dark: #1a1a1a;
+  --patriot-darker: #0d0d0d;
+  --patriot-gray: #2a2a2a;
+  --patriot-light-gray: #3a3a3a;
+  --patriot-neon-red: #ff1744;
+  --patriot-neon-blue: #00b4ff;
+  --patriot-neon-red-glow: #ff4569;
+  --patriot-neon-blue-glow: #33c4ff;
 }
 
+/* Global Dark Theme */
+html {
+  background: linear-gradient(135deg, var(--patriot-darker) 0%, var(--patriot-gray) 100%);
+  min-height: 100vh;
+}
 
-/* Optional: Reset body margin/padding and ensure full height */
 body {
   margin: 0;
   min-height: 100vh;
+  background: var(--patriot-dark);
+  color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--patriot-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, var(--patriot-neon-red), var(--patriot-neon-blue));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, var(--patriot-neon-red-glow), var(--patriot-neon-blue-glow));
+}
+
+/* Neon text effects */
+.neon-red {
+  color: var(--patriot-neon-red);
+  text-shadow: 0 0 10px var(--patriot-neon-red);
+}
+
+.neon-blue {
+  color: var(--patriot-neon-blue);
+  text-shadow: 0 0 10px var(--patriot-neon-blue);
+}
+
+.neon-text-glow {
+  animation: text-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes text-glow {
+  from {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+  to {
+    text-shadow: 0 0 20px currentColor, 0 0 30px currentColor, 0 0 40px currentColor;
+  }
+}
+
+/* Modern glass morphism effects */
+.glass-dark {
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-patriot {
+  background: linear-gradient(135deg, 
+    rgba(255, 23, 68, 0.1) 0%, 
+    rgba(26, 26, 26, 0.8) 50%, 
+    rgba(0, 180, 255, 0.1) 100%);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Cyber grid pattern */
+.cyber-grid {
+  background-image: 
+    linear-gradient(rgba(255, 23, 68, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 180, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Futuristic borders */
+.border-neon {
+  position: relative;
+}
+
+.border-neon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, var(--patriot-neon-red), var(--patriot-neon-blue));
+  border-radius: inherit;
+  padding: 2px;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: subtract;
+  -webkit-mask-composite: xor;
+}
+
+/* Holographic effect */
+.holographic {
+  background: linear-gradient(45deg, 
+    var(--patriot-neon-red) 0%,
+    var(--patriot-neon-blue) 25%,
+    var(--patriot-neon-red) 50%,
+    var(--patriot-neon-blue) 75%,
+    var(--patriot-neon-red) 100%);
+  background-size: 400% 400%;
+  animation: holographic-shift 3s ease-in-out infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes holographic-shift {
+  0%, 100% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
 }
 
