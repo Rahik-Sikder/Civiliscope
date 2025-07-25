@@ -5,7 +5,7 @@ bp = Blueprint('senators', __name__, url_prefix='/api/senators')
 
 @bp.route('/', methods=['GET'])
 def get_all_senators():
-    senators = Senator.query.all()
+    senators = Senator.query.order_by(Senator.last_name).all()
     # Can modify s.to_dict() to return only specific fields if needed
     return jsonify([{
             "id": s.id,

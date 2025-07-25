@@ -18,7 +18,9 @@ def create_app():
 
     with app.app_context():
         from .routes import senators
+        from .routes import representatives
         app.register_blueprint(senators.bp)
+        app.register_blueprint(representatives.bp)
 
         db.create_all()
 

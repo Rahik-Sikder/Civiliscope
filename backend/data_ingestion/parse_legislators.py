@@ -31,6 +31,7 @@ def ingest():
 
         for leg in legislators:
             full_name = leg["name"]["official_full"]
+            last_name = leg["name"]["last"]
             bio = leg.get("bio", {}) # birthday, gender
             terms = leg["terms"]
             latest_term = terms[-1]
@@ -38,6 +39,7 @@ def ingest():
             if latest_term["type"] == "sen":
                 senator = Senator(
                     full_name=full_name,
+                    last_name=last_name,
                     state=latest_term["state"],
                     party=latest_term["party"],
                     photo_url=None,  # can get this from bioguide later
@@ -50,6 +52,7 @@ def ingest():
             elif latest_term["type"] == "rep":
                 rep = Representative(
                     full_name=full_name,
+                    last_name=last_name,
                     state=latest_term["state"],
                     district=int(latest_term["district"]),
                     party=latest_term["party"],
@@ -67,7 +70,6 @@ def get_senate_seat_maps():
     scraper = SenateDeskScraper()
     senators_data = {}
     try:
-        print("Testing actual scraping...")
         senators_data = scraper.scrape_senators_list()
         print(f"Successfully scraped {len(senators_data)} senators")
             

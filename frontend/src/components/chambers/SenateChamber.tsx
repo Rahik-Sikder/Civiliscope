@@ -21,7 +21,7 @@ export default function SenateChamber() {
       case 'Democrat':
         return 'bg-patriot-neon-blue/20 border-patriot-neon-blue';
       default:
-        return 'bg-gray-500/20 border-gray-500';
+        return 'bg-gray-500/20 border-white-500';
     }
   };
   
@@ -131,8 +131,8 @@ export default function SenateChamber() {
         )}
 
         {/* Decorative elements */}
-        <div className="absolute top-10 left-10 w-4 h-4 border border-patriot-neon-red/50 rotate-45 animate-pulse-slow"></div>
-        <div className="absolute bottom-10 right-10 w-4 h-4 border border-patriot-neon-blue/50 rotate-45 animate-pulse-slow"></div>
+        <div className="absolute top-10 left-10 w-4 h-4 border border-patriot-neon-blue/50 rotate-45 animate-pulse-slow"></div>
+        <div className="absolute bottom-10 right-10 w-4 h-4 border border-patriot-neon-red/50 rotate-45 animate-pulse-slow"></div>
         
         {/* Ambient lighting effects */}
         <div className="absolute top-0 left-1/4 w-32 h-32 bg-patriot-neon-red/10 rounded-full blur-3xl animate-pulse-slow"></div>
