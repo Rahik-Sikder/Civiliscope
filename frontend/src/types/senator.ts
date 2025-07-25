@@ -4,6 +4,7 @@ export interface Senator {
   state: string;
   party: string;
   photo_url?: string;
+  seat_number: number;
   term_start?: string;
   term_end?: string;
 }

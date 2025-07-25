@@ -12,7 +12,8 @@ def get_all_senators():
             "name": s.full_name,
             "state": s.state,
             "party": s.party,
-            "photo_url": s.photo_url
+            "photo_url": s.photo_url,
+            "seat_number": s.seat_number,
         } for s in senators])
 
 @bp.route("/<int:senator_id>", methods=["GET"])
@@ -25,5 +26,6 @@ def get_senator(senator_id):
         "party": senator.party,
         "term_start": senator.term_start,
         "term_end": senator.term_end,
-        "photo_url": senator.photo_url
+        "photo_url": senator.photo_url,
+        "seat_number": senator.seat_number,
     })

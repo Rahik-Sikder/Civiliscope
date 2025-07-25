@@ -9,6 +9,7 @@ class Senator(db.Model):
     photo_url = db.Column(db.String(255))
     term_start = db.Column(db.Date)
     term_end = db.Column(db.Date)
+    seat_number = db.Column(db.Integer)
 
 class Representative(db.Model):
     __tablename__ = 'representatives'

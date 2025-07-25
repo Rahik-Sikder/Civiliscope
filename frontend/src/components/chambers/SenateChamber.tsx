@@ -10,26 +10,26 @@ export default function SenateChamber() {
   
   // Helper function to get senator by seat ID
   const getSenatorBySeat = (seatId: number): Senator | undefined => {
-    return senators?.find(senator => senator.id === seatId);
+    return senators?.find(senator => senator.seat_number === seatId);
   };
 
-  // Helper function to get party color
+  // Helper function to get party color with glassy effect
   const getPartyColor = (party: string) => {
     switch (party) {
       case 'Republican':
-        return 'bg-patriot-neon-red border-patriot-neon-red';
+        return 'bg-patriot-neon-red/20 border-patriot-neon-red';
       case 'Democrat':
-        return 'bg-patriot-neon-blue border-patriot-neon-blue';
+        return 'bg-patriot-neon-blue/20 border-patriot-neon-blue';
       default:
-        return 'bg-gray-500 border-gray-500';
+        return 'bg-gray-500/20 border-gray-500';
     }
   };
   
   // Configurable seat layout variables
   const SEAT_WIDTH = "6%";
-  const SEAT_HEIGHT = "5%";
-  const SEAT_FONT_SIZE = "text-[10px]";
-  const LAYOUT_SCALE = 0.85; // Scale factor to fit seats within chamber bounds
+  const SEAT_HEIGHT = "4.5%";
+  const SEAT_FONT_SIZE = "text-[11px]";
+  const LAYOUT_SCALE = 0.88; // Scale factor to fit seats within chamber bounds
 
   if (isLoading) {
     return (
@@ -50,7 +50,7 @@ export default function SenateChamber() {
   return (
     <div className="relative">
       {/* Chamber Floor */}
-      <div className="relative w-full aspect-[17/12] bg-gradient-to-b from-patriot-darker to-patriot-dark rounded-xl border border-patriot-neon-blue/20 overflow-hidden">
+      <div className="relative w-full aspect-[16/13] bg-gradient-to-b from-patriot-darker to-patriot-dark rounded-xl border border-patriot-neon-blue/20 overflow-hidden">
         {/* Background grid pattern */}
         <div className="absolute inset-0 cyber-grid opacity-30"></div>
         
@@ -62,9 +62,9 @@ export default function SenateChamber() {
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
           style={{
             width: `${100 * LAYOUT_SCALE}%`,
-            height: `${100 * LAYOUT_SCALE}%`,
+            height: `${90 * LAYOUT_SCALE}%`,
             left: '48%',
-            top: '47%',
+            top: '48%',
           }}
         >
           {senatorDesks.map(({ id, left, top, rotation }) => {
@@ -82,6 +82,7 @@ export default function SenateChamber() {
                   transform: `rotate(${rotation}deg)`,
                   width: SEAT_WIDTH,
                   height: SEAT_HEIGHT,
+                  // zIndex: hoveredSeat === id ? 30 : 10,
                 }}
                 onMouseEnter={() => setHoveredSeat(id)}
                 onMouseLeave={() => setHoveredSeat(null)}
@@ -106,7 +107,7 @@ export default function SenateChamber() {
 
         {/* Interactive overlay */}
         {hoveredSeat && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 glass-patriot rounded-lg px-4 py-2 border border-patriot-neon-red/30 max-w-sm">
+          <div className="absolute bottom-4 left-1/6 transform -translate-x-1/2 glass-patriot rounded-lg px-4 py-2 border border-patriot-neon-red/30 max-w-sm">
             {(() => {
               const senator = getSenatorBySeat(hoveredSeat);
               if (senator) {
@@ -139,6 +140,7 @@ export default function SenateChamber() {
       </div>
 
       {/* Chamber info overlay */}
+      {senators && 
       <div className="absolute top-4 right-4 glass-dark rounded-lg p-3 border border-white/10">
         <div className="text-xs text-gray-400 space-y-1">
           <div>Seats: {senators?.length || 0}/100</div>
@@ -154,7 +156,7 @@ export default function SenateChamber() {
             </div>
           )}
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

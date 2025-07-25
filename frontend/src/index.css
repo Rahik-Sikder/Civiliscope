@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+@theme {
+  --color-patriot-dark: #1a1a1a;
+  --color-patriot-darker: #0d0d0d;
+  --color-patriot-gray: #2a2a2a;
+  --color-patriot-light-gray: #3a3a3a;
+  --color-patriot-neon-red: #ff1744;
+  --color-patriot-neon-blue: #00b4ff;
+  --color-patriot-neon-red-glow: #ff4569;
+  --color-patriot-neon-blue-glow: #33c4ff;
+}
+
 /* Patriotic Dark Theme - Modern & Sleek */
 :root {
   --patriot-dark: #1a1a1a;

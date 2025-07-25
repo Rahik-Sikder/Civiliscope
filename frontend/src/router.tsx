@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home/HomePage.tsx';
 import SenatePage from './pages/Senate/SenatePage.tsx';
+import { DebugPage } from './debug/DebugPage.tsx';
 
 export default function Router() {
   return (
@@ -10,6 +11,7 @@ export default function Router() {
         <Route path="/" element={<HomePage />} />
         <Route path="/senate" element={<SenatePage />} />
         <Route path="/house" element={<SenatePage />} />
+        <Route path="/debug" element={<DebugPage />} />
         {/* Future routes here */}
       </Routes>
     </BrowserRouter>
