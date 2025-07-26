@@ -5,8 +5,12 @@ import RecentMotions from "../../components/dashboard/RecentMotions";
 import RecentHeadlines from "../../components/dashboard/RecentHeadlines";
 import TodaysFact from "../../components/dashboard/TodaysFact";
 import TodaysPower from "../../components/dashboard/TodaysPower";
+import LegislatorHoverTooltip from "../../components/chambers/LegislatorHoverTooltip";
+import { useMousePosition } from "../../hooks/useMousePosition";
 
 export default function SenatePage() {
+  const mousePosition = useMousePosition();
+  
   return (
     <MainLayout>
       <div className="min-h-screen">
@@ -22,7 +26,7 @@ export default function SenatePage() {
               <p className="text-xl text-gray-300 max-w-2xl mx-auto">
                 Interactive visualization of the upper chamber of Congress
               </p>
-              
+
               {/* Stats Bar */}
               <div className="flex justify-center items-center space-x-8 pt-6">
                 <div className="text-center">
@@ -51,14 +55,18 @@ export default function SenatePage() {
             <div className="col-span-12 lg:col-span-8 xl:col-span-9">
               <div className="glass-dark rounded-2xl p-6 h-full border border-patriot-neon-blue/20">
                 <div className="text-center mb-6">
-                  <h2 className="text-2xl font-bold text-white mb-2">Senate Chamber Layout</h2>
-                  <p className="text-gray-400">Click on seats to explore senator information</p>
+                  <h2 className="text-2xl font-bold text-white mb-2">
+                    Senate Chamber Layout
+                  </h2>
+                  <p className="text-gray-400">
+                    Click on seats to explore senator information
+                  </p>
                 </div>
-                
+
                 <div className="w-full">
                   <SenateChamber />
                 </div>
-                
+
                 {/* Legend */}
                 <div className="mt-6 flex justify-center">
                   <div className="glass-patriot rounded-lg p-4">
@@ -84,7 +92,7 @@ export default function SenatePage() {
             {/* Right Sidebar - Information Panels */}
             <div className="col-span-12 lg:col-span-4 xl:col-span-3 space-y-6">
               {/* Legislator Preview */}
-              <div className="h-70">
+              <div className="h-88">
                 <LegislatorPreview />
               </div>
 
@@ -111,6 +119,9 @@ export default function SenatePage() {
           </div>
         </div>
       </div>
+      
+      {/* Global Hover Tooltip */}
+      <LegislatorHoverTooltip position={mousePosition} />
     </MainLayout>
   );
 }

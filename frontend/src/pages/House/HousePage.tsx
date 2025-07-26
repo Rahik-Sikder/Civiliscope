@@ -5,8 +5,12 @@ import RecentMotions from "../../components/dashboard/RecentMotions";
 import RecentHeadlines from "../../components/dashboard/RecentHeadlines";
 import TodaysFact from "../../components/dashboard/TodaysFact";
 import TodaysPower from "../../components/dashboard/TodaysPower";
+import LegislatorHoverTooltip from "../../components/chambers/LegislatorHoverTooltip";
+import { useMousePosition } from "../../hooks/useMousePosition";
 
 export default function HousePage() {
+  const mousePosition = useMousePosition();
+  
   return (
     <MainLayout>
       <div className="min-h-screen">
@@ -84,7 +88,7 @@ export default function HousePage() {
             {/* Right Sidebar - Information Panels */}
             <div className="col-span-12 lg:col-span-4 xl:col-span-3 space-y-6">
               {/* Legislator Preview */}
-              <div className="h-70">
+              <div className="h-88">
                 <LegislatorPreview />
               </div>
 
@@ -111,6 +115,9 @@ export default function HousePage() {
           </div>
         </div>
       </div>
+      
+      {/* Global Hover Tooltip */}
+      <LegislatorHoverTooltip position={mousePosition} />
     </MainLayout>
   );
 }

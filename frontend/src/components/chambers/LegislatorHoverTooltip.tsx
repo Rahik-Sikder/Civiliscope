@@ -26,22 +26,26 @@ export default function LegislatorHoverTooltip({ position, skew }: LegislatorHov
     x: position.x + skew.offsetX,
     y: position.y + skew.offsetY
   } : position;
+  
 
   return (
     <div 
-      className="fixed z-50 pointer-events-none"
+      className="pointer-events-none"
       style={{
-        left: adjustedPosition.x + 10,
-        top: adjustedPosition.y - 10
+        position: 'fixed',
+        left: adjustedPosition.x + 15,
+        top: adjustedPosition.y + 25,
+        zIndex: 9999,
+        transform: 'none'
       }}
     >
-      <div className="glass-patriot rounded-lg p-4 border border-gray-600/30 max-w-xs shadow-lg shadow-black/50">
+        <div className="glass-patriot rounded-lg p-4 border border-gray-600/30 max-w-xs shadow-lg shadow-black/50">
         <div className="flex items-start space-x-3">
           <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-700 flex-shrink-0 border border-gray-600">
             {hoveredLegislator.photo_url ? (
               <img 
                 src={hoveredLegislator.photo_url} 
-                alt={hoveredLegislator.full_name}
+                alt={hoveredLegislator.name}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
@@ -56,7 +60,7 @@ export default function LegislatorHoverTooltip({ position, skew }: LegislatorHov
           
           <div className="flex-1 min-w-0">
             <h4 className="text-sm font-bold text-white leading-tight mb-1">
-              {hoveredLegislator.full_name}
+              {hoveredLegislator.name}
             </h4>
             <p className={`text-xs font-medium ${partyColor} mb-1`}>
               {hoveredLegislator.party}

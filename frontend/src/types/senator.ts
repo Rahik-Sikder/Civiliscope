@@ -1,7 +1,6 @@
 import type { Legislator } from './legislator';
 
 export interface Senator extends Legislator {
-  name: string;
   seat_number: number;
 }
 

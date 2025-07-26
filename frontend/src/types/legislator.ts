@@ -1,6 +1,6 @@
 export interface Legislator {
   id: number;
-  full_name: string;
+  name: string;
   last_name?: string;
   state: string;
   party: string;

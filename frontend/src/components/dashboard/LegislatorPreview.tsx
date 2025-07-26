@@ -37,7 +37,7 @@ export default function LegislatorPreview() {
             {selectedLegislator.photo_url ? (
               <img 
                 src={selectedLegislator.photo_url} 
-                alt={selectedLegislator.full_name}
+                alt={selectedLegislator.name}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
@@ -52,7 +52,7 @@ export default function LegislatorPreview() {
           
           <div className="flex-1 min-w-0 space-y-2">
             <h4 className="text-lg font-bold text-white leading-tight">
-              {selectedLegislator.full_name}
+              {selectedLegislator.name}
             </h4>
             <div className="space-y-1">
               <p className={`font-medium text-sm ${partyColor}`}>

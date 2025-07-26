@@ -3,12 +3,10 @@ import "./Chamber.css";
 import { senatorDesks } from "./senatorDesks";
 import { useSenators } from "../../hooks/useSenators";
 import { useLegislatorStore } from "../../store/legislatorStore";
-import LegislatorHoverTooltip from "./LegislatorHoverTooltip";
 import type { Senator } from "../../types/senator";
 
 export default function SenateChamber() {
   const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { data: senators, isLoading, error } = useSenators();
   const { setSelectedLegislator, setHoveredLegislator, clearHoveredLegislator } = useLegislatorStore();
   
@@ -37,10 +35,8 @@ export default function SenateChamber() {
     }
   };
 
-  // Handle seat hover - set hovered legislator and track mouse position
-  const handleSeatHover = (seatId: number, event: React.MouseEvent) => {
-    setMousePosition({ x: event.clientX, y: event.clientY });
-    
+  // Handle seat hover - set hovered legislator
+  const handleSeatHover = (seatId: number) => {
     const senator = getSenatorBySeat(seatId);
     if (senator) {
       setHoveredLegislator(senator);
@@ -72,11 +68,6 @@ export default function SenateChamber() {
   const SEAT_FONT_SIZE = "text-[11px]";
   const LAYOUT_SCALE = 0.88; // Scale factor to fit seats within chamber bounds
 
-  // Responsive mouse offset calculations
-  const mouse_skew = {
-    offsetX: -Math.min(window.innerWidth * 0.25, 140), // 15% of screen width, max 140px
-    offsetY: -Math.min(window.innerHeight * 0.05, 10), // 25% of screen height, max 230px
-  };
 
   if (isLoading) {
     return (
@@ -131,8 +122,7 @@ export default function SenateChamber() {
                   height: SEAT_HEIGHT,
                 }}
                 onClick={() => handleSeatClick(id)}
-                onMouseEnter={(e) => handleSeatHover(id, e)}
-                onMouseMove={(e) => setMousePosition({ x: e.clientX, y: e.clientY })}
+                onMouseEnter={() => handleSeatHover(id)}
                 onMouseLeave={handleSeatLeave}
               >
                 <div 
@@ -153,11 +143,6 @@ export default function SenateChamber() {
           })}
         </div>
 
-        {/* Hover Tooltip */}
-        <LegislatorHoverTooltip 
-          position={mousePosition} 
-          skew={mouse_skew}
-        />
 
         {/* Decorative elements */}
         <div className="absolute top-10 left-10 w-4 h-4 border border-patriot-neon-blue/50 rotate-45 animate-pulse-slow"></div>
