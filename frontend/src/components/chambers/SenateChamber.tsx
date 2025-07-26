@@ -1,14 +1,23 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import "./Chamber.css";
 import { senatorDesks } from "./senatorDesks";
 import { useSenators } from "../../hooks/useSenators";
 import { useLegislatorStore } from "../../store/legislatorStore";
 import type { Senator } from "../../types/senator";
 
-export default function SenateChamber() {
-  const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
+interface SenateChamberProps {
+  onSeatClick?: (seatId: number) => void;
+  onSeatHover?: (seatId: number) => void;
+  onSeatLeave?: () => void;
+}
+
+export default function SenateChamber({
+  onSeatClick,
+  onSeatHover,
+  onSeatLeave,
+}: SenateChamberProps) {
   const { data: senators, isLoading, error } = useSenators();
-  const { setSelectedLegislator, setHoveredLegislator, clearHoveredLegislator } = useLegislatorStore();
+  const { selectedSeat, clearHoveredLegislator } = useLegislatorStore();
   
   // Cleanup hover state when component unmounts
   useEffect(() => {
@@ -22,32 +31,25 @@ export default function SenateChamber() {
     return senators?.find(senator => senator.seat_number === seatId);
   };
 
-
-  // Handle seat click - set selected legislator
+  // Handle seat click - use external handler if provided
   const handleSeatClick = (seatId: number) => {
-    const senator = getSenatorBySeat(seatId);
-    if (senator) {
-      setSelectedSeat(seatId);
-      setSelectedLegislator(senator);
-    } else {
-      setSelectedSeat(seatId);
-      setSelectedLegislator(null);
+    if (onSeatClick) {
+      onSeatClick(seatId);
     }
   };
 
-  // Handle seat hover - set hovered legislator
+  // Handle seat hover - use external handler if provided
   const handleSeatHover = (seatId: number) => {
-    const senator = getSenatorBySeat(seatId);
-    if (senator) {
-      setHoveredLegislator(senator);
-    } else {
-      setHoveredLegislator(null);
+    if (onSeatHover) {
+      onSeatHover(seatId);
     }
   };
 
-  // Handle seat leave - clear hover states
+  // Handle seat leave - use external handler if provided
   const handleSeatLeave = () => {
-    clearHoveredLegislator();
+    if (onSeatLeave) {
+      onSeatLeave();
+    }
   };
 
   // Helper function to get party color with glassy effect
@@ -65,8 +67,8 @@ export default function SenateChamber() {
   // Configurable seat layout variables
   const SEAT_WIDTH = "6%";
   const SEAT_HEIGHT = "4.5%";
-  const SEAT_FONT_SIZE = "text-[11px]";
-  const LAYOUT_SCALE = 0.88; // Scale factor to fit seats within chamber bounds
+  const SEAT_FONT_SIZE = "xl:text-[11px] text-[9px]"; // Responsive font size
+  const LAYOUT_SCALE = 0.90; // Scale factor to fit seats within chamber bounds
 
 
   if (isLoading) {
@@ -153,20 +155,34 @@ export default function SenateChamber() {
         <div className="absolute bottom-0 right-1/4 w-32 h-32 bg-patriot-neon-blue/10 rounded-full blur-3xl animate-pulse-slow"></div>
       </div>
 
-      {/* Chamber info overlay */}
+      {/* Chamber info overlay - responsive positioning */}
       {senators && 
-      <div className="absolute top-4 right-4 glass-dark rounded-lg p-3 border border-white/10">
-        <div className="text-xs text-gray-400 space-y-1">
-          <div>Seats: {senators?.length || 0}/100</div>
-          <div className="text-patriot-neon-red">
-            ● {senators?.filter(s => s.party === 'Republican').length || 0} Republicans
+      <div className="absolute 
+                      xl:top-4 xl:right-4 xl:bottom-auto
+                      bottom-4 right-4
+                      glass-dark rounded-lg border border-white/10
+                      xl:p-3 p-2
+                      xl:w-auto w-24">
+        <div className="text-gray-400 
+                        xl:text-xs text-[10px]
+                        xl:space-y-1 space-y-0.5">
+          <div className="xl:block hidden">Seats: {senators?.length || 0}/100</div>
+          <div className="xl:hidden block">100/100</div>
+          
+          <div className="text-patriot-neon-red whitespace-nowrap">
+            <span className="xl:inline hidden">● {senators?.filter(s => s.party === 'Republican').length || 0} Republicans</span>
+            <span className="xl:hidden inline">● {senators?.filter(s => s.party === 'Republican').length || 0} R</span>
           </div>
-          <div className="text-patriot-neon-blue">
-            ● {senators?.filter(s => s.party === 'Democrat').length || 0} Democrats
+          
+          <div className="text-patriot-neon-blue whitespace-nowrap">
+            <span className="xl:inline hidden">● {senators?.filter(s => s.party === 'Democrat').length || 0} Democrats</span>
+            <span className="xl:hidden inline">● {senators?.filter(s => s.party === 'Democrat').length || 0} D</span>
           </div>
+          
           {senators?.filter(s => s.party !== 'Republican' && s.party !== 'Democrat').length > 0 && (
-            <div className="text-gray-400">
-              ● {senators?.filter(s => s.party !== 'Republican' && s.party !== 'Democrat').length} Others
+            <div className="text-gray-400 whitespace-nowrap">
+              <span className="xl:inline hidden">● {senators?.filter(s => s.party !== 'Republican' && s.party !== 'Democrat').length} Others</span>
+              <span className="xl:hidden inline">● {senators?.filter(s => s.party !== 'Republican' && s.party !== 'Democrat').length} O</span>
             </div>
           )}
         </div>

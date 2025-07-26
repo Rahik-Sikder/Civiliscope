@@ -1,15 +1,72 @@
 import MainLayout from "../../components/layout/MainLayout";
 import SenateChamber from "../../components/chambers/SenateChamber";
 import LegislatorPreview from "../../components/dashboard/LegislatorPreview";
+import LegislatorList from "../../components/dashboard/LegislatorList";
 import RecentMotions from "../../components/dashboard/RecentMotions";
 import RecentHeadlines from "../../components/dashboard/RecentHeadlines";
 import TodaysFact from "../../components/dashboard/TodaysFact";
 import TodaysPower from "../../components/dashboard/TodaysPower";
 import LegislatorHoverTooltip from "../../components/chambers/LegislatorHoverTooltip";
 import { useMousePosition } from "../../hooks/useMousePosition";
+import { useSenators } from "../../hooks/useSenators";
+import { useLegislatorStore } from "../../store/legislatorStore";
+import type { Legislator } from "../../types/legislator";
+import type { Senator } from "../../types/senator";
 
 export default function SenatePage() {
   const mousePosition = useMousePosition();
+  const { data: senators } = useSenators();
+  const { 
+    selectedLegislator, 
+    hoveredLegislator, 
+    setHoveredLegislator, 
+    setSelectedLegislatorAndSeat,
+    clearHoveredLegislator 
+  } = useLegislatorStore();
+
+  // Helper function to find senator by seat number
+  const getSenatorBySeat = (seatId: number): Senator | undefined => {
+    return senators?.find(senator => senator.seat_number === seatId);
+  };
+
+  // Helper function to find seat number by senator
+  const getSeatBySenator = (legislator: Legislator): number | null => {
+    const senator = senators?.find(s => s.id === legislator.id);
+    return senator ? senator.seat_number : null;
+  };
+
+  // Handler for when legislator is clicked from list
+  const handleLegislatorClick = (legislator: Legislator) => {
+    const seatId = getSeatBySenator(legislator);
+    setSelectedLegislatorAndSeat(legislator, seatId);
+  };
+
+  // Handler for when legislator is hovered from list
+  const handleLegislatorHover = (legislator: Legislator) => {
+    setHoveredLegislator(legislator, 'list');
+  };
+
+  // Handler for when leaving hover from list
+  const handleLegislatorLeave = () => {
+    clearHoveredLegislator();
+  };
+
+  // Handler for when seat is clicked from chamber
+  const handleSeatClick = (seatId: number) => {
+    const senator = getSenatorBySeat(seatId) as Legislator;
+    setSelectedLegislatorAndSeat(senator, seatId);
+  };
+
+  // Handler for when seat is hovered from chamber
+  const handleSeatHover = (seatId: number) => {
+    const senator = getSenatorBySeat(seatId) as Legislator;
+    setHoveredLegislator(senator, 'chamber');
+  };
+
+  // Handler for when leaving hover from chamber
+  const handleSeatLeave = () => {
+    clearHoveredLegislator();
+  };
   
   return (
     <MainLayout>
@@ -64,7 +121,11 @@ export default function SenatePage() {
                 </div>
 
                 <div className="w-full">
-                  <SenateChamber />
+                  <SenateChamber 
+                    onSeatClick={handleSeatClick}
+                    onSeatHover={handleSeatHover}
+                    onSeatLeave={handleSeatLeave}
+                  />
                 </div>
 
                 {/* Legend */}
@@ -90,19 +151,27 @@ export default function SenatePage() {
             </div>
 
             {/* Right Sidebar - Information Panels */}
-            <div className="col-span-12 lg:col-span-4 xl:col-span-3 space-y-6">
-              {/* Legislator Preview */}
-              <div className="h-88">
-                <LegislatorPreview />
-              </div>
-
-              {/* Today's Fact and Power */}
-              <div className="grid grid-cols-1 gap-4">
-                <div className="h-72">
-                  <TodaysFact chamber="senate" />
+            <div className="col-span-12 lg:col-span-4 xl:col-span-3">
+              {/* Container with responsive height that scales with screen size */}
+              <div className="w-full h-[80vh] lg:h-[80vh] xl:h-[100vh] flex flex-col space-y-6">
+                {/* Legislator Preview */}
+                <div className="h-88 flex-shrink-0">
+                  <LegislatorPreview />
                 </div>
-                <div className="h-80">
-                  <TodaysPower chamber="senate" />
+
+                {/* Senator List - Takes remaining space */}
+                <div className="flex-1 min-h-0">
+                  {senators && (
+                    <LegislatorList
+                      legislators={senators}
+                      selectedLegislator={selectedLegislator}
+                      hoveredLegislator={hoveredLegislator}
+                      onLegislatorClick={handleLegislatorClick}
+                      onLegislatorHover={handleLegislatorHover}
+                      onLegislatorLeave={handleLegislatorLeave}
+                      chamber="senate"
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -114,6 +183,16 @@ export default function SenatePage() {
               </div>
               <div className="h-96">
                 <RecentHeadlines />
+              </div>
+            </div>
+
+            {/* Today's Fact and Power - Moved below */}
+            <div className="col-span-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="h-72">
+                <TodaysFact chamber="senate" />
+              </div>
+              <div className="h-80">
+                <TodaysPower chamber="senate" />
               </div>
             </div>
           </div>

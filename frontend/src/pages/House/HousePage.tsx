@@ -92,14 +92,9 @@ export default function HousePage() {
                 <LegislatorPreview />
               </div>
 
-              {/* Today's Fact and Power */}
-              <div className="grid grid-cols-1 gap-4">
-                <div className="h-72">
-                  <TodaysFact chamber="house" />
-                </div>
-                <div className="h-80">
-                  <TodaysPower chamber="house" />
-                </div>
+              {/* Placeholder for LegislatorList - will be added next */}
+              <div className="flex-1 min-h-96">
+                {/* LegislatorList will go here */}
               </div>
             </div>
 
@@ -110,6 +105,16 @@ export default function HousePage() {
               </div>
               <div className="h-96">
                 <RecentHeadlines />
+              </div>
+            </div>
+
+            {/* Today's Fact and Power - Moved below */}
+            <div className="col-span-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="h-72">
+                <TodaysFact chamber="house" />
+              </div>
+              <div className="h-80">
+                <TodaysPower chamber="house" />
               </div>
             </div>
           </div>

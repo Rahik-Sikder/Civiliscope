@@ -13,8 +13,10 @@ interface LegislatorHoverTooltipProps {
 
 export default function LegislatorHoverTooltip({ position, skew }: LegislatorHoverTooltipProps) {
   const hoveredLegislator = useLegislatorStore((state) => state.hoveredLegislator);
+  const hoverSource = useLegislatorStore((state) => state.hoverSource);
 
-  if (!hoveredLegislator) {
+  // Only show tooltip when hovering from chamber, not from list
+  if (!hoveredLegislator || hoverSource !== 'chamber') {
     return null;
   }
 
