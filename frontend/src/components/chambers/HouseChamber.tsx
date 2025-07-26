@@ -46,7 +46,6 @@ export default function HouseChamber() {
     const republicanSeats = houseSeats.filter(
       (s) => s.partyPreference === "Republican"
     );
-    const otherSeats = houseSeats.filter((s) => s.partyPreference === "Other");
 
     // Seat Democrats on the left
     democrats.forEach((rep, index) => {
@@ -235,7 +234,7 @@ export default function HouseChamber() {
             ).length || 0}{" "}
             Democrats
           </div>
-          {representatives?.filter((r) => 
+          {representatives && representatives?.filter((r) => 
             !["Republican", "R", "Democrat", "Democratic", "D"].includes(r.party)
           ).length > 0 && (
             <div className="text-gray-400">
