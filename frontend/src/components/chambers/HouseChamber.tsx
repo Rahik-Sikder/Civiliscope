@@ -1,13 +1,28 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import "./Chamber.css";
 import { houseSeats } from "./houseSeats";
 import { useRepresentatives } from "../../hooks/useRepresentatives";
+import { useLegislatorStore } from "../../store/legislatorStore";
+import LegislatorHoverTooltip from "./LegislatorHoverTooltip";
 import type { Representative } from "../../types/representative";
 
 export default function HouseChamber() {
-  const [hoveredSeat, setHoveredSeat] = useState<number | null>(null);
-  
+  const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   const { data: representatives, isLoading, error } = useRepresentatives();
+  const {
+    setSelectedLegislator,
+    setHoveredLegislator,
+    clearHoveredLegislator,
+  } = useLegislatorStore();
+  
+  // Cleanup hover state when component unmounts
+  useEffect(() => {
+    return () => {
+      clearHoveredLegislator();
+    };
+  }, [clearHoveredLegislator]);
 
   // Configurable seat layout variables (similar to Senate chamber)
   const SEAT_WIDTH = "3.8%";
@@ -22,6 +37,12 @@ export default function HouseChamber() {
     top: "65%",
   };
 
+  // Responsive mouse offset calculations
+  const mouse_skew = {
+    offsetX: -Math.min(window.innerWidth * 0.25, 140), // 15% of screen width, max 140px
+    offsetY: -Math.min(window.innerHeight * 0.05, 10), // 25% of screen height, max 230px
+  };
+
   // Seating algorithm: Assign representatives to seats based on party
   const seatedRepresentatives = useMemo(() => {
     if (!representatives || representatives.length === 0) return new Map();
@@ -29,14 +50,16 @@ export default function HouseChamber() {
     const seating = new Map<number, Representative>();
 
     // Sort representatives by party - handle various party formats
-    const democrats = representatives.filter((r) => 
-      r.party === "Democrat" || r.party === "Democratic" || r.party === "D"
+    const democrats = representatives.filter(
+      (r) =>
+        r.party === "Democrat" || r.party === "Democratic" || r.party === "D"
     );
-    const republicans = representatives.filter((r) => 
-      r.party === "Republican" || r.party === "R"
+    const republicans = representatives.filter(
+      (r) => r.party === "Republican" || r.party === "R"
     );
-    const others = representatives.filter((r) => 
-      !["Democrat", "Democratic", "D", "Republican", "R"].includes(r.party)
+    const others = representatives.filter(
+      (r) =>
+        !["Democrat", "Democratic", "D", "Republican", "R"].includes(r.party)
     );
 
     // Get available seats by preference
@@ -79,6 +102,36 @@ export default function HouseChamber() {
     seatId: number
   ): Representative | undefined => {
     return seatedRepresentatives.get(seatId);
+  };
+
+
+  // Handle seat click - set selected legislator
+  const handleSeatClick = (seatId: number) => {
+    const representative = getRepresentativeBySeat(seatId);
+    if (representative) {
+      setSelectedSeat(seatId);
+      setSelectedLegislator(representative);
+    } else {
+      setSelectedSeat(seatId);
+      setSelectedLegislator(null);
+    }
+  };
+
+  // Handle seat hover - set hovered legislator and track mouse position
+  const handleSeatHover = (seatId: number, event: React.MouseEvent) => {
+    setMousePosition({ x: event.clientX, y: event.clientY });
+
+    const representative = getRepresentativeBySeat(seatId);
+    if (representative) {
+      setHoveredLegislator(representative);
+    } else {
+      setHoveredLegislator(null);
+    }
+  };
+
+  // Handle seat leave - clear hover states
+  const handleSeatLeave = () => {
+    clearHoveredLegislator();
   };
 
   // Helper function to get party color with glassy effect
@@ -154,13 +207,17 @@ export default function HouseChamber() {
                   width: SEAT_WIDTH,
                   height: SEAT_HEIGHT,
                 }}
-                onMouseEnter={() => setHoveredSeat(id)}
-                onMouseLeave={() => setHoveredSeat(null)}
+                onClick={() => handleSeatClick(id)}
+                onMouseEnter={(e) => handleSeatHover(id, e)}
+                onMouseMove={(e) =>
+                  setMousePosition({ x: e.clientX, y: e.clientY })
+                }
+                onMouseLeave={handleSeatLeave}
               >
                 <div
                   className={`w-full h-full rounded-full border-2 flex items-center justify-center ${SEAT_FONT_SIZE} font-bold transition-all duration-300 ${
-                    hoveredSeat === id
-                      ? `${partyColors} shadow-lg shadow-current/50 text-white animate-pulse`
+                    selectedSeat === id
+                      ? `${partyColors} shadow-[0_0_20px_rgba(255,255,255,0.6)] text-white animate-pulse`
                       : hasData
                       ? `${partyColors} opacity-80 hover:opacity-100 text-white`
                       : `${partyColors} text-gray-400 hover:text-white`
@@ -180,32 +237,8 @@ export default function HouseChamber() {
           })}
         </div>
 
-        {/* Interactive overlay */}
-        {hoveredSeat && (
-          <div className="absolute bottom-4 left-1/6 transform -translate-x-1/2 glass-patriot rounded-lg px-4 py-2 border border-patriot-neon-red/30 max-w-sm">
-            {(() => {
-              const representative = getRepresentativeBySeat(hoveredSeat);
-              if (representative) {
-                return (
-                  <div className="text-white text-sm space-y-1">
-                    <p className="font-bold">{representative.name}</p>
-                    <p className="text-gray-300">
-                      {representative.state}-{representative.district} •{" "}
-                      {representative.party}
-                    </p>
-                  </div>
-                );
-              } else {
-                return (
-                  <p className="text-white text-sm font-medium">
-                    Seat {hoveredSeat}{" "}
-                    <span className="text-gray-400">• No data available</span>
-                  </p>
-                );
-              }
-            })()}
-          </div>
-        )}
+        {/* Hover Tooltip */}
+        <LegislatorHoverTooltip position={mousePosition} skew={mouse_skew} />
 
         {/* Decorative elements */}
         <div className="absolute top-10 left-10 w-4 h-4 border border-patriot-neon-red/50 rotate-45 animate-pulse-slow"></div>
@@ -222,29 +255,42 @@ export default function HouseChamber() {
           <div>Seats: {representatives?.length || 0}/435</div>
           <div className="text-patriot-neon-red">
             ●{" "}
-            {representatives?.filter((r) => 
+            {representatives?.filter((r) =>
               ["Republican", "R"].includes(r.party)
             ).length || 0}{" "}
             Republicans
           </div>
           <div className="text-patriot-neon-blue">
             ●{" "}
-            {representatives?.filter((r) => 
+            {representatives?.filter((r) =>
               ["Democrat", "Democratic", "D"].includes(r.party)
             ).length || 0}{" "}
             Democrats
           </div>
-          {representatives && representatives?.filter((r) => 
-            !["Republican", "R", "Democrat", "Democratic", "D"].includes(r.party)
-          ).length > 0 && (
-            <div className="text-gray-400">
-              ●{" "}
-              {representatives?.filter((r) => 
-                !["Republican", "R", "Democrat", "Democratic", "D"].includes(r.party)
-              ).length}{" "}
-              Others
-            </div>
-          )}
+          {representatives &&
+            representatives?.filter(
+              (r) =>
+                !["Republican", "R", "Democrat", "Democratic", "D"].includes(
+                  r.party
+                )
+            ).length > 0 && (
+              <div className="text-gray-400">
+                ●{" "}
+                {
+                  representatives?.filter(
+                    (r) =>
+                      ![
+                        "Republican",
+                        "R",
+                        "Democrat",
+                        "Democratic",
+                        "D",
+                      ].includes(r.party)
+                  ).length
+                }{" "}
+                Others
+              </div>
+            )}
         </div>
       </div>
     </div>

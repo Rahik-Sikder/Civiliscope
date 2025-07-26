@@ -1,16 +1,57 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Chamber.css";
 import { senatorDesks } from "./senatorDesks";
 import { useSenators } from "../../hooks/useSenators";
+import { useLegislatorStore } from "../../store/legislatorStore";
+import LegislatorHoverTooltip from "./LegislatorHoverTooltip";
 import type { Senator } from "../../types/senator";
 
 export default function SenateChamber() {
-  const [hoveredSeat, setHoveredSeat] = useState<number | null>(null);
+  const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { data: senators, isLoading, error } = useSenators();
+  const { setSelectedLegislator, setHoveredLegislator, clearHoveredLegislator } = useLegislatorStore();
+  
+  // Cleanup hover state when component unmounts
+  useEffect(() => {
+    return () => {
+      clearHoveredLegislator();
+    };
+  }, [clearHoveredLegislator]);
   
   // Helper function to get senator by seat ID
   const getSenatorBySeat = (seatId: number): Senator | undefined => {
     return senators?.find(senator => senator.seat_number === seatId);
+  };
+
+
+  // Handle seat click - set selected legislator
+  const handleSeatClick = (seatId: number) => {
+    const senator = getSenatorBySeat(seatId);
+    if (senator) {
+      setSelectedSeat(seatId);
+      setSelectedLegislator(senator);
+    } else {
+      setSelectedSeat(seatId);
+      setSelectedLegislator(null);
+    }
+  };
+
+  // Handle seat hover - set hovered legislator and track mouse position
+  const handleSeatHover = (seatId: number, event: React.MouseEvent) => {
+    setMousePosition({ x: event.clientX, y: event.clientY });
+    
+    const senator = getSenatorBySeat(seatId);
+    if (senator) {
+      setHoveredLegislator(senator);
+    } else {
+      setHoveredLegislator(null);
+    }
+  };
+
+  // Handle seat leave - clear hover states
+  const handleSeatLeave = () => {
+    clearHoveredLegislator();
   };
 
   // Helper function to get party color with glassy effect
@@ -30,6 +71,12 @@ export default function SenateChamber() {
   const SEAT_HEIGHT = "4.5%";
   const SEAT_FONT_SIZE = "text-[11px]";
   const LAYOUT_SCALE = 0.88; // Scale factor to fit seats within chamber bounds
+
+  // Responsive mouse offset calculations
+  const mouse_skew = {
+    offsetX: -Math.min(window.innerWidth * 0.25, 140), // 15% of screen width, max 140px
+    offsetY: -Math.min(window.innerHeight * 0.05, 10), // 25% of screen height, max 230px
+  };
 
   if (isLoading) {
     return (
@@ -82,15 +129,16 @@ export default function SenateChamber() {
                   transform: `rotate(${rotation}deg)`,
                   width: SEAT_WIDTH,
                   height: SEAT_HEIGHT,
-                  // zIndex: hoveredSeat === id ? 30 : 10,
                 }}
-                onMouseEnter={() => setHoveredSeat(id)}
-                onMouseLeave={() => setHoveredSeat(null)}
+                onClick={() => handleSeatClick(id)}
+                onMouseEnter={(e) => handleSeatHover(id, e)}
+                onMouseMove={(e) => setMousePosition({ x: e.clientX, y: e.clientY })}
+                onMouseLeave={handleSeatLeave}
               >
                 <div 
                   className={`w-full h-full rounded-md border-2 flex items-center justify-center ${SEAT_FONT_SIZE} font-bold transition-all duration-300 ${
-                    hoveredSeat === id 
-                      ? `${partyColors} shadow-lg shadow-current/50 text-white animate-pulse` 
+                    selectedSeat === id 
+                      ? `${partyColors} shadow-[0_0_20px_rgba(255,255,255,0.6)] text-white animate-pulse` 
                       : hasData
                         ? `${partyColors} opacity-80 hover:opacity-100 text-white`
                         : 'bg-patriot-gray border-patriot-light-gray hover:border-patriot-neon-blue text-gray-300 hover:text-white'
@@ -105,30 +153,11 @@ export default function SenateChamber() {
           })}
         </div>
 
-        {/* Interactive overlay */}
-        {hoveredSeat && (
-          <div className="absolute bottom-4 left-1/6 transform -translate-x-1/2 glass-patriot rounded-lg px-4 py-2 border border-patriot-neon-red/30 max-w-sm">
-            {(() => {
-              const senator = getSenatorBySeat(hoveredSeat);
-              if (senator) {
-                return (
-                  <div className="text-white text-sm space-y-1">
-                    <p className="font-bold">{senator.name}</p>
-                    <p className="text-gray-300">
-                      {senator.state} • {senator.party}
-                    </p>
-                  </div>
-                );
-              } else {
-                return (
-                  <p className="text-white text-sm font-medium">
-                    Seat {hoveredSeat} <span className="text-gray-400">• No data available</span>
-                  </p>
-                );
-              }
-            })()}
-          </div>
-        )}
+        {/* Hover Tooltip */}
+        <LegislatorHoverTooltip 
+          position={mousePosition} 
+          skew={mouse_skew}
+        />
 
         {/* Decorative elements */}
         <div className="absolute top-10 left-10 w-4 h-4 border border-patriot-neon-blue/50 rotate-45 animate-pulse-slow"></div>

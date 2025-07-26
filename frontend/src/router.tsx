@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home/HomePage.tsx';
 import SenatePage from './pages/Senate/SenatePage.tsx';

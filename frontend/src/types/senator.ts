@@ -1,12 +1,8 @@
-export interface Senator {
-  id: number;
+import type { Legislator } from './legislator';
+
+export interface Senator extends Legislator {
   name: string;
-  state: string;
-  party: string;
-  photo_url?: string;
   seat_number: number;
-  term_start?: string;
-  term_end?: string;
 }
 
 export interface SenatorDetails extends Senator {

@@ -1,6 +1,10 @@
-import React from "react";
 import MainLayout from "../../components/layout/MainLayout";
 import SenateChamber from "../../components/chambers/SenateChamber";
+import LegislatorPreview from "../../components/dashboard/LegislatorPreview";
+import RecentMotions from "../../components/dashboard/RecentMotions";
+import RecentHeadlines from "../../components/dashboard/RecentHeadlines";
+import TodaysFact from "../../components/dashboard/TodaysFact";
+import TodaysPower from "../../components/dashboard/TodaysPower";
 
 export default function SenatePage() {
   return (
@@ -40,64 +44,68 @@ export default function SenatePage() {
           </div>
         </div>
 
-        {/* Chamber Visualization */}
-        <div className="container mx-auto px-6 py-12">
-          <div className="glass-dark rounded-2xl p-8 border border-patriot-neon-blue/20">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-white mb-2">Senate Chamber Layout</h2>
-              <p className="text-gray-400">Hover over seats to explore senator information</p>
-            </div>
-            
-            <SenateChamber />
-            
-            {/* Legend */}
-            <div className="mt-8 flex justify-center">
-              <div className="glass-patriot rounded-lg p-4">
-                <div className="flex items-center space-x-6 text-sm">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-2 bg-patriot-neon-red rounded"></div>
-                    <span className="text-gray-300">Republican</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-2 bg-patriot-neon-blue rounded"></div>
-                    <span className="text-gray-300">Democrat</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-4 h-2 bg-gray-500 rounded"></div>
-                    <span className="text-gray-300">Independent</span>
+        {/* Dashboard Grid */}
+        <div className="container mx-auto px-6 py-8">
+          <div className="grid grid-cols-12 gap-6 min-h-screen">
+            {/* Main Chamber - Takes up most space */}
+            <div className="col-span-12 lg:col-span-8 xl:col-span-9">
+              <div className="glass-dark rounded-2xl p-6 h-full border border-patriot-neon-blue/20">
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-bold text-white mb-2">Senate Chamber Layout</h2>
+                  <p className="text-gray-400">Click on seats to explore senator information</p>
+                </div>
+                
+                <div className="w-full">
+                  <SenateChamber />
+                </div>
+                
+                {/* Legend */}
+                <div className="mt-6 flex justify-center">
+                  <div className="glass-patriot rounded-lg p-4">
+                    <div className="flex items-center space-x-6 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-4 h-2 bg-patriot-neon-red rounded"></div>
+                        <span className="text-gray-300">Republican</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-4 h-2 bg-patriot-neon-blue rounded"></div>
+                        <span className="text-gray-300">Democrat</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-4 h-2 bg-gray-500 rounded"></div>
+                        <span className="text-gray-300">Independent</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Info Cards */}
-        <div className="container mx-auto px-6 pb-20">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="glass-patriot rounded-xl p-6">
-              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-                <span className="neon-red mr-2">⚡</span>
-                Quick Facts
-              </h3>
-              <div className="space-y-3 text-gray-300">
-                <p>• Each state elects 2 senators regardless of population</p>
-                <p>• Senators serve 6-year terms with staggered elections</p>
-                <p>• The Vice President serves as President of the Senate</p>
-                <p>• Majority party controls the legislative agenda</p>
+            {/* Right Sidebar - Information Panels */}
+            <div className="col-span-12 lg:col-span-4 xl:col-span-3 space-y-6">
+              {/* Legislator Preview */}
+              <div className="h-70">
+                <LegislatorPreview />
+              </div>
+
+              {/* Today's Fact and Power */}
+              <div className="grid grid-cols-1 gap-4">
+                <div className="h-72">
+                  <TodaysFact chamber="senate" />
+                </div>
+                <div className="h-80">
+                  <TodaysPower chamber="senate" />
+                </div>
               </div>
             </div>
 
-            <div className="glass-patriot rounded-xl p-6">
-              <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-                <span className="neon-blue mr-2">📊</span>
-                Key Powers
-              </h3>
-              <div className="space-y-3 text-gray-300">
-                <p>• Confirm presidential appointments</p>
-                <p>• Try impeachment cases</p>
-                <p>• Ratify treaties with foreign nations</p>
-                <p>• Equal representation for all states</p>
+            {/* Bottom Section - Recent Activity */}
+            <div className="col-span-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="h-96">
+                <RecentMotions />
+              </div>
+              <div className="h-96">
+                <RecentHeadlines />
               </div>
             </div>
           </div>

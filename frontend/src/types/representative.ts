@@ -1,10 +1,6 @@
-export interface Representative {
-  id: number;
+import type { Legislator } from './legislator';
+
+export interface Representative extends Legislator {
   name: string;
-  state: string;
   district: number;
-  party: string;
-  photo_url?: string;
-  term_start?: string;
-  term_end?: string;
 }

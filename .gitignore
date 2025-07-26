@@ -31,5 +31,9 @@ build/
 # Optional
 data-ingestion/__pycache__/
 
+# Claude Code Files - can change later
+*Claude.md
+.claude/*
+
 # Firebase secrets (if stored locally)
 firebase-adminsdk.json
