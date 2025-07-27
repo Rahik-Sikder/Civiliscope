@@ -70,6 +70,12 @@ class TestSenatorAPI:
             
             # Party should not be empty
             assert senator["party"].strip(), f"Empty party for senator ID {senator['id']}"
+            
+            # Photo URL should be valid if present
+            if "photo_url" in senator and senator["photo_url"]:
+                photo_url = senator["photo_url"]
+                assert photo_url.startswith("https://"), f"Photo URL should use HTTPS: {photo_url}"
+                assert "bioguide.congress.gov" in photo_url, f"Photo URL should be from bioguide.congress.gov: {photo_url}"
 
 
 class TestRepresentativeAPI:
@@ -133,6 +139,12 @@ class TestRepresentativeAPI:
             
             # Party should not be empty
             assert rep["party"].strip(), f"Empty party for rep ID {rep['id']}"
+            
+            # Photo URL should be valid if present
+            if "photo_url" in rep and rep["photo_url"]:
+                photo_url = rep["photo_url"]
+                assert photo_url.startswith("https://"), f"Photo URL should use HTTPS: {photo_url}"
+                assert "bioguide.congress.gov" in photo_url, f"Photo URL should be from bioguide.congress.gov: {photo_url}"
 
 
 class TestAPIHealth:
