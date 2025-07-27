@@ -1,15 +1,132 @@
 import MainLayout from "../../components/layout/MainLayout";
 import HouseChamber from "../../components/chambers/HouseChamber";
 import LegislatorPreview from "../../components/dashboard/LegislatorPreview";
+import LegislatorList from "../../components/dashboard/LegislatorList";
 import RecentMotions from "../../components/dashboard/RecentMotions";
 import RecentHeadlines from "../../components/dashboard/RecentHeadlines";
 import TodaysFact from "../../components/dashboard/TodaysFact";
 import TodaysPower from "../../components/dashboard/TodaysPower";
 import LegislatorHoverTooltip from "../../components/chambers/LegislatorHoverTooltip";
 import { useMousePosition } from "../../hooks/useMousePosition";
+import { useRepresentatives } from "../../hooks/useRepresentatives";
+import { useLegislatorStore } from "../../store/legislatorStore";
+import type { Legislator } from "../../types/legislator";
+import type { Representative } from "../../types/representative";
+import { houseSeats } from "../../components/chambers/houseSeats";
+import { useMemo } from "react";
 
 export default function HousePage() {
   const mousePosition = useMousePosition();
+  const { data: representatives } = useRepresentatives();
+  const { 
+    selectedLegislator, 
+    hoveredLegislator, 
+    setHoveredLegislator, 
+    setSelectedLegislatorAndSeat,
+    clearHoveredLegislator 
+  } = useLegislatorStore();
+
+  // Create seating map (matches HouseChamber logic)
+  const seatedRepresentatives = useMemo(() => {
+    if (!representatives || representatives.length === 0) return new Map();
+
+    const seating = new Map<number, Representative>();
+
+    // Sort representatives by party - handle various party formats
+    const democrats = representatives.filter(
+      (r) =>
+        r.party === "Democrat" || r.party === "Democratic" || r.party === "D"
+    );
+    const republicans = representatives.filter(
+      (r) => r.party === "Republican" || r.party === "R"
+    );
+    const others = representatives.filter(
+      (r) =>
+        !["Democrat", "Democratic", "D", "Republican", "R"].includes(r.party)
+    );
+
+    // Get available seats by preference
+    const democratSeats = houseSeats.filter(
+      (s) => s.partyPreference === "Democrat"
+    );
+    const republicanSeats = houseSeats.filter(
+      (s) => s.partyPreference === "Republican"
+    );
+
+    // Seat Democrats on the left
+    democrats.forEach((rep, index) => {
+      if (index < democratSeats.length) {
+        seating.set(democratSeats[index].id, rep);
+      }
+    });
+
+    // Seat Republicans on the right
+    republicans.forEach((rep, index) => {
+      if (index < republicanSeats.length) {
+        seating.set(republicanSeats[index].id, rep);
+      }
+    });
+
+    // Seat others in remaining seats
+    const allUsedSeatIds = new Set(seating.keys());
+    const remainingSeats = houseSeats.filter((s) => !allUsedSeatIds.has(s.id));
+
+    others.forEach((rep, index) => {
+      if (index < remainingSeats.length) {
+        seating.set(remainingSeats[index].id, rep);
+      }
+    });
+
+    return seating;
+  }, [representatives]);
+
+  // Helper function to find representative by seat number
+  const getRepresentativeBySeat = (seatId: number): Representative | undefined => {
+    return seatedRepresentatives.get(seatId);
+  };
+
+  // Helper function to find seat number by representative
+  const getSeatByRepresentative = (legislator: Legislator): number | null => {
+    for (const [seatId, rep] of seatedRepresentatives.entries()) {
+      if (rep.id === legislator.id) {
+        return seatId;
+      }
+    }
+    return null;
+  };
+
+  // Handler for when legislator is clicked from list
+  const handleLegislatorClick = (legislator: Legislator) => {
+    const seatId = getSeatByRepresentative(legislator);
+    setSelectedLegislatorAndSeat(legislator, seatId);
+  };
+
+  // Handler for when legislator is hovered from list
+  const handleLegislatorHover = (legislator: Legislator) => {
+    setHoveredLegislator(legislator, 'list');
+  };
+
+  // Handler for when leaving hover from list
+  const handleLegislatorLeave = () => {
+    clearHoveredLegislator();
+  };
+
+  // Handler for when seat is clicked from chamber
+  const handleSeatClick = (seatId: number) => {
+    const representative = getRepresentativeBySeat(seatId) as Legislator;
+    setSelectedLegislatorAndSeat(representative, seatId);
+  };
+
+  // Handler for when seat is hovered from chamber
+  const handleSeatHover = (seatId: number) => {
+    const representative = getRepresentativeBySeat(seatId) as Legislator;
+    setHoveredLegislator(representative, 'chamber');
+  };
+
+  // Handler for when leaving hover from chamber
+  const handleSeatLeave = () => {
+    clearHoveredLegislator();
+  };
   
   return (
     <MainLayout>
@@ -60,7 +177,11 @@ export default function HousePage() {
                 </div>
                 
                 <div className="w-full">
-                  <HouseChamber />
+                  <HouseChamber 
+                    onSeatClick={handleSeatClick}
+                    onSeatHover={handleSeatHover}
+                    onSeatLeave={handleSeatLeave}
+                  />
                 </div>
                 
                 {/* Legend */}
@@ -86,15 +207,28 @@ export default function HousePage() {
             </div>
 
             {/* Right Sidebar - Information Panels */}
-            <div className="col-span-12 lg:col-span-4 xl:col-span-3 space-y-6">
-              {/* Legislator Preview */}
-              <div className="h-88">
-                <LegislatorPreview />
-              </div>
+            <div className="col-span-12 lg:col-span-4 xl:col-span-3">
+              {/* Container with responsive height that scales with screen size */}
+              <div className="w-full h-200 lg:h-175 xl:h-230 1535:h-300 flex flex-col space-y-6">
+                {/* Legislator Preview */}
+                <div className="h-85 flex-shrink-0">
+                  <LegislatorPreview />
+                </div>
 
-              {/* Placeholder for LegislatorList - will be added next */}
-              <div className="flex-1 min-h-96">
-                {/* LegislatorList will go here */}
+                {/* Representative List - Takes remaining space */}
+                <div className="flex-1 min-h-0">
+                  {representatives && (
+                    <LegislatorList
+                      legislators={representatives}
+                      selectedLegislator={selectedLegislator}
+                      hoveredLegislator={hoveredLegislator}
+                      onLegislatorClick={handleLegislatorClick}
+                      onLegislatorHover={handleLegislatorHover}
+                      onLegislatorLeave={handleLegislatorLeave}
+                      chamber="house"
+                    />
+                  )}
+                </div>
               </div>
             </div>
 

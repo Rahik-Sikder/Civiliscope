@@ -13,6 +13,7 @@ import { useLegislatorStore } from "../../store/legislatorStore";
 import type { Legislator } from "../../types/legislator";
 import type { Senator } from "../../types/senator";
 
+
 export default function SenatePage() {
   const mousePosition = useMousePosition();
   const { data: senators } = useSenators();
@@ -153,9 +154,9 @@ export default function SenatePage() {
             {/* Right Sidebar - Information Panels */}
             <div className="col-span-12 lg:col-span-4 xl:col-span-3">
               {/* Container with responsive height that scales with screen size */}
-              <div className="w-full h-[80vh] lg:h-[80vh] xl:h-[100vh] flex flex-col space-y-6">
+              <div className="w-full h-200 lg:h-175 xl:h-230 1535:h-300 flex flex-col space-y-6">
                 {/* Legislator Preview */}
-                <div className="h-88 flex-shrink-0">
+                <div className="h-85 flex-shrink-0">
                   <LegislatorPreview />
                 </div>
 

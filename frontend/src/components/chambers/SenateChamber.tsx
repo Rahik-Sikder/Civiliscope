@@ -56,9 +56,9 @@ export default function SenateChamber({
   const getPartyColor = (party: string) => {
     switch (party) {
       case 'Republican':
-        return 'bg-patriot-neon-red/20 border-patriot-neon-red';
+        return 'bg-patriot-neon-red/20 border-patriot-neon-red 1535:border-patriot-neon-red/80';
       case 'Democrat':
-        return 'bg-patriot-neon-blue/20 border-patriot-neon-blue';
+        return 'bg-patriot-neon-blue/20 border-patriot-neon-blue 1535:border-patriot-neon-blue/80';
       default:
         return 'bg-gray-500/20 border-white-500';
     }
@@ -128,7 +128,7 @@ export default function SenateChamber({
                 onMouseLeave={handleSeatLeave}
               >
                 <div 
-                  className={`w-full h-full rounded-md border-2 flex items-center justify-center ${SEAT_FONT_SIZE} font-bold transition-all duration-300 ${
+                  className={`w-full h-full rounded-md border-2 1535:border-6 flex items-center justify-center ${SEAT_FONT_SIZE} font-bold transition-all duration-300 ${
                     selectedSeat === id 
                       ? `${partyColors} shadow-[0_0_20px_rgba(255,255,255,0.6)] text-white animate-pulse` 
                       : hasData

@@ -1,19 +1,24 @@
-import { useState, useMemo, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import "./Chamber.css";
 import { houseSeats } from "./houseSeats";
 import { useRepresentatives } from "../../hooks/useRepresentatives";
 import { useLegislatorStore } from "../../store/legislatorStore";
 import type { Representative } from "../../types/representative";
 
-export default function HouseChamber() {
-  const [selectedSeat, setSelectedSeat] = useState<number | null>(null);
+interface HouseChamberProps {
+  onSeatClick?: (seatId: number) => void;
+  onSeatHover?: (seatId: number) => void;
+  onSeatLeave?: () => void;
+}
+
+export default function HouseChamber({
+  onSeatClick,
+  onSeatHover,
+  onSeatLeave,
+}: HouseChamberProps) {
 
   const { data: representatives, isLoading, error } = useRepresentatives();
-  const {
-    setSelectedLegislator,
-    setHoveredLegislator,
-    clearHoveredLegislator,
-  } = useLegislatorStore();
+  const { selectedSeat, clearHoveredLegislator } = useLegislatorStore();
   
   // Cleanup hover state when component unmounts
   useEffect(() => {
@@ -25,7 +30,7 @@ export default function HouseChamber() {
   // Configurable seat layout variables (similar to Senate chamber)
   const SEAT_WIDTH = "3.8%";
   const SEAT_HEIGHT = "3.8%"; // Made square for circular appearance
-  const SEAT_FONT_SIZE = "text-[9px]";
+  const SEAT_FONT_SIZE = "xl:text-[11px] text-[9px] sm:text-[7px]";
   const LAYOUT_SCALE = 1.25; // Scale factor to fit seats within chamber bounds
 
   const chamber_style = {
@@ -98,31 +103,25 @@ export default function HouseChamber() {
   };
 
 
-  // Handle seat click - set selected legislator
+  // Handle seat click - use external handler if provided
   const handleSeatClick = (seatId: number) => {
-    const representative = getRepresentativeBySeat(seatId);
-    if (representative) {
-      setSelectedSeat(seatId);
-      setSelectedLegislator(representative);
-    } else {
-      setSelectedSeat(seatId);
-      setSelectedLegislator(null);
+    if (onSeatClick) {
+      onSeatClick(seatId);
     }
   };
 
-  // Handle seat hover - set hovered legislator
+  // Handle seat hover - use external handler if provided
   const handleSeatHover = (seatId: number) => {
-    const representative = getRepresentativeBySeat(seatId);
-    if (representative) {
-      setHoveredLegislator(representative);
-    } else {
-      setHoveredLegislator(null);
+    if (onSeatHover) {
+      onSeatHover(seatId);
     }
   };
 
-  // Handle seat leave - clear hover states
+  // Handle seat leave - use external handler if provided
   const handleSeatLeave = () => {
-    clearHoveredLegislator();
+    if (onSeatLeave) {
+      onSeatLeave();
+    }
   };
 
   // Helper function to get party color with glassy effect
