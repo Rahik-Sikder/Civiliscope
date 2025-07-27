@@ -7,6 +7,7 @@ import RecentHeadlines from "../../components/dashboard/RecentHeadlines";
 import TodaysFact from "../../components/dashboard/TodaysFact";
 import TodaysPower from "../../components/dashboard/TodaysPower";
 import LegislatorHoverTooltip from "../../components/chambers/LegislatorHoverTooltip";
+import { useEffect } from "react";
 import { useMousePosition } from "../../hooks/useMousePosition";
 import { useSenators } from "../../hooks/useSenators";
 import { useLegislatorStore } from "../../store/legislatorStore";
@@ -22,8 +23,14 @@ export default function SenatePage() {
     hoveredLegislator, 
     setHoveredLegislator, 
     setSelectedLegislatorAndSeat,
-    clearHoveredLegislator 
+    clearHoveredLegislator,
+    clearSelectedLegislator 
   } = useLegislatorStore();
+
+  // Clear selected legislator when page loads
+  useEffect(() => {
+    clearSelectedLegislator();
+  }, [clearSelectedLegislator]);
 
   // Helper function to find senator by seat number
   const getSenatorBySeat = (seatId: number): Senator | undefined => {
@@ -154,9 +161,9 @@ export default function SenatePage() {
             {/* Right Sidebar - Information Panels */}
             <div className="col-span-12 lg:col-span-4 xl:col-span-3">
               {/* Container with responsive height that scales with screen size */}
-              <div className="w-full h-200 lg:h-175 xl:h-230 1535:h-300 flex flex-col space-y-6">
+              <div className="w-full h-215 lg:h-175 xl:h-275 1535:h-315 flex flex-col space-y-6">
                 {/* Legislator Preview */}
-                <div className="h-85 flex-shrink-0">
+                <div className="h-70 flex-shrink-0">
                   <LegislatorPreview />
                 </div>
 

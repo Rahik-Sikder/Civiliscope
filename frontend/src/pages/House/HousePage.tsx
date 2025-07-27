@@ -1,3 +1,4 @@
+import { useMemo, useEffect } from "react";
 import MainLayout from "../../components/layout/MainLayout";
 import HouseChamber from "../../components/chambers/HouseChamber";
 import LegislatorPreview from "../../components/dashboard/LegislatorPreview";
@@ -13,7 +14,6 @@ import { useLegislatorStore } from "../../store/legislatorStore";
 import type { Legislator } from "../../types/legislator";
 import type { Representative } from "../../types/representative";
 import { houseSeats } from "../../components/chambers/houseSeats";
-import { useMemo } from "react";
 
 export default function HousePage() {
   const mousePosition = useMousePosition();
@@ -23,8 +23,14 @@ export default function HousePage() {
     hoveredLegislator, 
     setHoveredLegislator, 
     setSelectedLegislatorAndSeat,
-    clearHoveredLegislator 
+    clearHoveredLegislator,
+    clearSelectedLegislator 
   } = useLegislatorStore();
+
+  // Clear selected legislator when page loads
+  useEffect(() => {
+    clearSelectedLegislator();
+  }, [clearSelectedLegislator]);
 
   // Create seating map (matches HouseChamber logic)
   const seatedRepresentatives = useMemo(() => {
@@ -209,9 +215,9 @@ export default function HousePage() {
             {/* Right Sidebar - Information Panels */}
             <div className="col-span-12 lg:col-span-4 xl:col-span-3">
               {/* Container with responsive height that scales with screen size */}
-              <div className="w-full h-200 lg:h-175 xl:h-230 1535:h-300 flex flex-col space-y-6">
+              <div className="w-full h-215 lg:h-175 xl:h-250 1535:h-315 flex flex-col space-y-6">
                 {/* Legislator Preview */}
-                <div className="h-85 flex-shrink-0">
+                <div className="h-70 flex-shrink-0">
                   <LegislatorPreview />
                 </div>
 

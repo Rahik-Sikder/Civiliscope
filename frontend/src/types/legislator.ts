@@ -1,5 +1,6 @@
 export interface Legislator {
   id: number;
+  bioguide_id: string;
   name: string;
   last_name?: string;
   state: string;

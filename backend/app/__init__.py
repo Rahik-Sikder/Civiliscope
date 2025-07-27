@@ -6,21 +6,25 @@ from .config import Config
 
 db = SQLAlchemy()
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    
+
     # Configure CORS using environment variable
-    CORS(app, origins=[app.config['FRONTEND_URL']], supports_credentials=True)
-    
+    CORS(app, origins=[app.config["FRONTEND_URL"]], supports_credentials=True)
+
     db.init_app(app)
     migrate = Migrate(app, db)
 
     with app.app_context():
         from .routes import senators
         from .routes import representatives
+        from .routes import members
+
         app.register_blueprint(senators.bp)
         app.register_blueprint(representatives.bp)
+        app.register_blueprint(members.bp)
 
         db.create_all()
 

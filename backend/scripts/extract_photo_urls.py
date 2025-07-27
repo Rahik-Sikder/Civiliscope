@@ -21,29 +21,29 @@ def extract_photo_urls_to_json():
     Creates a mapping of bioguide ID to photo URL.
     """
     app = create_app()
-    
+
     with app.app_context():
         photo_cache = {}
-        
+
         # Get all senators
         senators = Senator.query.all()
         for senator in senators:
             if senator.photo_url:
                 photo_cache[senator.id] = senator.photo_url
-                
-        # Get all representatives  
+
+        # Get all representatives
         representatives = Representative.query.all()
         for rep in representatives:
             if rep.photo_url:
                 photo_cache[rep.id] = rep.photo_url
-        
+
         # Save to JSON file in data_ingestion directory
         data_ingestion_dir = os.path.join(backend_dir, "data_ingestion")
         cache_file = os.path.join(data_ingestion_dir, "photo_url_cache.json")
-        
+
         with open(cache_file, "w") as f:
             json.dump(photo_cache, f, indent=2)
-        
+
         print(f"Extracted {len(photo_cache)} photo URLs to {cache_file}")
         return photo_cache
 

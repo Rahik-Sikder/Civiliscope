@@ -37,7 +37,7 @@ export default function LegislatorList({
       const elementHeight = element.clientHeight;
       
       // Position element at 40% from top instead of 50% (center)
-      const targetScrollTop = elementTop - (containerHeight * .8) + (elementHeight / 2);
+      const targetScrollTop = elementTop - (containerHeight * .5) + (elementHeight / 2);
       
       container.scrollTo({
         top: Math.max(0, targetScrollTop),

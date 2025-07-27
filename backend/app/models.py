@@ -1,8 +1,10 @@
 from . import db
 
+
 class Senator(db.Model):
-    __tablename__ = 'senators'
+    __tablename__ = "senators"
     id = db.Column(db.Integer, primary_key=True)
+    bioguide_id = db.Column(db.String(7), nullable=False)
     full_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     state = db.Column(db.String(2), nullable=False)
@@ -12,9 +14,11 @@ class Senator(db.Model):
     term_end = db.Column(db.Date)
     seat_number = db.Column(db.Integer)
 
+
 class Representative(db.Model):
-    __tablename__ = 'representatives'
+    __tablename__ = "representatives"
     id = db.Column(db.Integer, primary_key=True)
+    bioguide_id = db.Column(db.String(7), nullable=False)
     full_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     state = db.Column(db.String(2), nullable=False)

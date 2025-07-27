@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import { useLegislatorStore } from '../../store/legislatorStore';
 import type { Representative } from '../../types/representative';
 
 export default function LegislatorPreview() {
+  const navigate = useNavigate();
   const selectedLegislator = useLegislatorStore((state) => state.selectedLegislator);
   if (!selectedLegislator) {
     return (
@@ -22,6 +24,17 @@ export default function LegislatorPreview() {
 
   const partyColor = selectedLegislator.party === 'Republican' ? 'neon-red' : 
                      selectedLegislator.party === 'Democrat' ? 'neon-blue' : 'text-white';
+
+  // Get party-specific hover styles for the button
+  const getPartyHoverStyles = () => {
+    if (selectedLegislator.party === 'Republican') {
+      return 'hover:border-patriot-neon-red/50 hover:bg-patriot-neon-red/10 hover:shadow-[0_0_15px_rgba(239,68,68,0.3)]';
+    } else if (selectedLegislator.party === 'Democrat') {
+      return 'hover:border-patriot-neon-blue/50 hover:bg-patriot-neon-blue/10 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]';
+    } else {
+      return 'hover:border-white/50 hover:bg-white/10 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)]';
+    }
+  };
 
   return (
     <div className="glass-patriot rounded-xl p-6 h-full">
@@ -68,24 +81,15 @@ export default function LegislatorPreview() {
           </div>
         </div>
 
-        {/* Basic Information */}
-        <div className="space-y-3 text-sm">
-          <div className="glass-dark rounded-lg p-3 border border-gray-600/30">
-            <div className="flex items-center space-x-2">
-              <span className="text-gray-400 text-lg">🗳️</span>
-              <div>
-                <p className="text-gray-400 text-xs uppercase font-medium mb-1">Position</p>
-                <p className="text-white">
-                  {'district' in selectedLegislator ? 'Representative' : 'Senator'}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="pt-3 border-t border-gray-600">
-          <button className="w-full glass-dark rounded-lg p-3 text-sm text-white hover:bg-gray-700/50 transition-colors border border-gray-600/30">
-            View Full Profile
+          <button 
+            onClick={() => navigate(`/legislator/${selectedLegislator.bioguide_id}`)}
+            className={`w-full glass-dark rounded-lg p-3 text-sm text-white transition-all duration-300 border border-gray-600/30 hover:scale-105 group ${getPartyHoverStyles()}`}
+          >
+            <span className="flex items-center justify-center space-x-2">
+              <span>View Full Profile</span>
+              <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
+            </span>
           </button>
         </div>
       </div>
