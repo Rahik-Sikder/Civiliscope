@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import MainLayout from "../../components/layout/MainLayout";
+import { useCongress } from "../../hooks/useCongress";
 
 export default function HomePage() {
+  const { data: congress, isLoading, error } = useCongress();
+
   return (
     <MainLayout>
       <div className="min-h-screen cyber-grid">
@@ -19,8 +22,8 @@ export default function HomePage() {
 
               {/* Subtitle */}
               <p className="text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                Explore the <span className="neon-red font-semibold">U.S. Congress</span> through 
-                modern visualization — one seat at a time
+                Promoting <span className="neon-red font-semibold">Congressional Transparency</span> through 
+                modern visualization and real-time data — revealing lobbying influence one seat at a time
               </p>
 
               {/* CTA Buttons */}
@@ -56,39 +59,92 @@ export default function HomePage() {
           <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-gradient-to-r from-patriot-neon-red/20 to-patriot-neon-blue/20 rounded-full blur-xl animate-pulse-slow"></div>
         </div>
 
+        {/* Current Congress Section */}
+        {congress && (
+          <div className="glass-dark border-y border-patriot-neon-blue/20">
+            <div className="container mx-auto px-6 py-16">
+              <div className="text-center space-y-8">
+                <div className="space-y-4">
+                  <h2 className="text-4xl lg:text-5xl font-bold">
+                    <span className="holographic">{congress.congress.name}</span>
+                  </h2>
+                  <div className="w-24 h-1 bg-gradient-to-r from-patriot-neon-blue to-patriot-neon-red mx-auto rounded-full"></div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 ">
+                  <div className="glass-patriot rounded-xl p-6 text-center space-y-3 hover:scale-105 transition-transform duration-300">
+                    <div className="text-3xl font-bold neon-blue">{congress.congress.number}</div>
+                    <div className="text-gray-300 font-semibold">Congress Number</div>
+                  </div>
+                  
+                  <div className="glass-patriot rounded-xl p-6 text-center space-y-3 hover:scale-105 transition-transform duration-300">
+                    <div className="text-3xl font-bold holographic">{congress.congress.startYear} - {congress.congress.endYear}</div>
+                    <div className="text-gray-300 font-semibold">Term Period</div>
+                  </div>
+                  
+                  <div className="glass-patriot rounded-xl p-6 text-center space-y-3 hover:scale-105 transition-transform duration-300">
+                    <div className="text-3xl font-bold neon-red">{congress.congress.sessions.length}</div>
+                    <div className="text-gray-300 font-semibold">Sessions</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="glass-dark border-y border-patriot-neon-red/20">
+            <div className="container mx-auto px-6 py-8">
+              <div className="text-center">
+                <p className="text-patriot-neon-red">Unable to load current congress information</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {isLoading && (
+          <div className="glass-dark border-y border-patriot-neon-blue/20">
+            <div className="container mx-auto px-6 py-16">
+              <div className="text-center">
+                <div className="text-patriot-neon-blue animate-pulse">Loading congress information...</div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Features Section */}
         <div className="container mx-auto px-6 py-20">
           <div className="grid md:grid-cols-3 gap-8">
             {/* Feature 1 */}
             <div className="glass-patriot rounded-xl p-8 text-center space-y-4 hover:scale-105 transition-transform duration-300">
               <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-r from-patriot-neon-red to-patriot-neon-blue flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">🏛️</span>
+                <span className="text-2xl font-bold text-white">🔍</span>
               </div>
-              <h3 className="text-xl font-bold text-white">Interactive Visualization</h3>
+              <h3 className="text-xl font-bold text-white">Congressional Transparency</h3>
               <p className="text-gray-400">
-                Hover over seats to explore detailed legislator information in real-time
+                Uncover the inner workings of Congress with detailed legislator profiles and voting records
               </p>
             </div>
 
             {/* Feature 2 */}
             <div className="glass-patriot rounded-xl p-8 text-center space-y-4 hover:scale-105 transition-transform duration-300">
               <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-r from-patriot-neon-blue to-patriot-neon-red flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">📊</span>
+                <span className="text-2xl font-bold text-white">📡</span>
               </div>
-              <h3 className="text-xl font-bold text-white">Real-Time Data</h3>
+              <h3 className="text-xl font-bold text-white">Live Congressional Data</h3>
               <p className="text-gray-400">
-                Powered by official congress-legislators data for accuracy and reliability
+                Access up-to-date information on current members, sessions, and legislative activities
               </p>
             </div>
 
             {/* Feature 3 */}
             <div className="glass-patriot rounded-xl p-8 text-center space-y-4 hover:scale-105 transition-transform duration-300">
               <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-r from-patriot-neon-red to-patriot-neon-blue flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">⚡</span>
+                <span className="text-2xl font-bold text-white">💰</span>
               </div>
-              <h3 className="text-xl font-bold text-white">Modern Interface</h3>
+              <h3 className="text-xl font-bold text-white">Lobbying Intelligence</h3>
               <p className="text-gray-400">
-                Sleek, responsive design built for the modern web experience
+                Reveal lobbying connections and influence networks shaping congressional decisions
               </p>
             </div>
           </div>
@@ -111,8 +167,8 @@ export default function HomePage() {
                 <div className="text-gray-400 tracking-wide">States</div>
               </div>
               <div className="space-y-2">
-                <div className="text-4xl font-bold text-white">∞</div>
-                <div className="text-gray-400 tracking-wide">Possibilities</div>
+                <div className="text-4xl font-bold text-white">🏛️</div>
+                <div className="text-gray-400 tracking-wide">Democracy</div>
               </div>
             </div>
           </div>

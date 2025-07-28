@@ -10,7 +10,6 @@ def get_all_reps():
     return jsonify(
         [
             {
-                "id": r.id,
                 "bioguide_id": r.bioguide_id,
                 "name": r.full_name,
                 "state": r.state,
@@ -24,12 +23,11 @@ def get_all_reps():
 
 
 # Limited usecase - default to member api
-@bp.route("/<int:representative_id>", methods=["GET"])
-def get_senator(representative_id):
-    rep = Representative.query.get_or_404(representative_id)
+@bp.route("/<string:bioguide_id>", methods=["GET"])
+def get_representative(bioguide_id):
+    rep = Representative.query.get_or_404(bioguide_id)
     return jsonify(
         {
-            "id": rep.id,
             "bioguide_id": rep.bioguide_id,
             "name": rep.full_name,
             "state": rep.state,

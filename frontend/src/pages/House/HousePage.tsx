@@ -94,7 +94,7 @@ export default function HousePage() {
   // Helper function to find seat number by representative
   const getSeatByRepresentative = (legislator: Legislator): number | null => {
     for (const [seatId, rep] of seatedRepresentatives.entries()) {
-      if (rep.id === legislator.id) {
+      if (rep.bioguide_id === legislator.bioguide_id) {
         return seatId;
       }
     }

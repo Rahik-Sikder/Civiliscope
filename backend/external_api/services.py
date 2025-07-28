@@ -42,3 +42,17 @@ def get_member_details(bioguide_id: str) -> Optional[Dict]:
     except Exception as e:
         logger.error(f"Error getting member details for {bioguide_id}: {e}")
         return None
+
+
+def get_current_congress() -> Optional[Dict]:
+    """
+    Get information about the current Congress.
+
+    Returns:
+        Full JSON response from Congress.gov API containing current congress information, or None if not found.
+    """
+    try:
+        return api.get_current_congress()
+    except Exception as e:
+        logger.error(f"Error getting current congress information: {e}")
+        return None

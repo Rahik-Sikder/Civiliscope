@@ -39,7 +39,7 @@ export default function SenatePage() {
 
   // Helper function to find seat number by senator
   const getSeatBySenator = (legislator: Legislator): number | null => {
-    const senator = senators?.find(s => s.id === legislator.id);
+    const senator = senators?.find(s => s.bioguide_id === legislator.bioguide_id);
     return senator ? senator.seat_number : null;
   };
 

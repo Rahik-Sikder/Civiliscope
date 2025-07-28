@@ -123,14 +123,14 @@ export default function LegislatorList({
         className="flex-1 overflow-y-auto p-2 space-y-2 scrollbar-thin scrollbar-track-patriot-dark scrollbar-thumb-patriot-neon-blue/50"
       >
         {sortedLegislators.map((legislator) => {
-          const isSelected = selectedLegislator?.id === legislator.id;
-          const isHovered = hoveredLegislator?.id === legislator.id;
+          const isSelected = selectedLegislator?.bioguide_id === legislator.bioguide_id;
+          const isHovered = hoveredLegislator?.bioguide_id === legislator.bioguide_id;
           const partyColors = getPartyColor(legislator.party);
           const partyTextColor = getPartyTextColor(legislator.party);
 
           return (
             <div
-              key={legislator.id}
+              key={legislator.bioguide_id}
               ref={isSelected ? selectedItemRef : null}
               className={`
                 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200

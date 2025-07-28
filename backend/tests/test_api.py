@@ -360,6 +360,118 @@ class TestMemberAPI:
                 break  # Test one from each chamber
 
 
+class TestCongressAPI:
+    """Test congress-related endpoints from Congress.gov API integration."""
+
+    def test_get_current_congress(self):
+        """Test GET /api/congress/current returns current congress information."""
+        response = requests.get(f"{BASE_URL}/api/congress/current", timeout=TIMEOUT)
+
+        assert response.status_code == 200
+        data = response.json()
+
+        # Should follow Congress.gov API response structure
+        assert "congress" in data
+        assert "request" in data
+
+        congress = data["congress"]
+        request = data["request"]
+
+        # Validate request structure
+        assert "contentType" in request
+        assert "format" in request
+        assert request["contentType"] == "application/json"
+        assert request["format"] == "json"
+
+        # Validate core congress fields
+        required_fields = [
+            "number",
+            "name", 
+            "startYear",
+            "endYear",
+            "url",
+            "updateDate"
+        ]
+        for field in required_fields:
+            assert field in congress, f"Missing required field: {field}"
+
+        # Validate data types
+        assert isinstance(congress["number"], int)
+        assert isinstance(congress["startYear"], int)
+        assert isinstance(congress["endYear"], int)
+        assert congress["number"] > 0, "Congress number should be positive"
+        assert congress["startYear"] > 1700, "Start year should be realistic"
+        assert congress["endYear"] > congress["startYear"], "End year should be after start year"
+        
+        # Validate URL format
+        assert congress["url"].startswith("https://api.congress.gov/"), "URL should be from Congress.gov API"
+        
+        # Validate name format (should be like "118th Congress (2023-2025)")
+        assert str(congress["number"]) in congress["name"], "Congress name should contain number"
+        assert str(congress["startYear"]) in congress["name"], "Congress name should contain start year"
+        assert str(congress["endYear"]) in congress["name"], "Congress name should contain end year"
+
+    def test_current_congress_session_structure(self):
+        """Test that current congress response includes sessions data."""
+        response = requests.get(f"{BASE_URL}/api/congress/current", timeout=TIMEOUT)
+        
+        if response.status_code == 200:
+            data = response.json()
+            congress = data["congress"]
+            
+            # Sessions should be present
+            assert "sessions" in congress
+            sessions = congress["sessions"]
+            
+            # Should have count and url
+            assert "count" in sessions
+            assert "url" in sessions
+            assert isinstance(sessions["count"], int)
+            assert sessions["count"] >= 0
+            assert sessions["url"].startswith("https://api.congress.gov/")
+
+    def test_current_congress_data_consistency(self):
+        """Test that current congress data is internally consistent."""
+        response = requests.get(f"{BASE_URL}/api/congress/current", timeout=TIMEOUT)
+        
+        if response.status_code == 200:
+            data = response.json()
+            congress = data["congress"]
+            
+            # The congress number should match expected pattern for current time
+            current_year = 2025  # Based on environment date
+            expected_congress_min = ((current_year - 1789) // 2) + 1 - 2  # Allow some variance
+            expected_congress_max = ((current_year - 1789) // 2) + 1 + 2
+            
+            assert expected_congress_min <= congress["number"] <= expected_congress_max, \
+                f"Congress number {congress['number']} seems unrealistic for year {current_year}"
+            
+            # Start and end years should make sense for the congress number
+            expected_start_year = 1789 + (congress["number"] - 1) * 2
+            assert abs(congress["startYear"] - expected_start_year) <= 1, \
+                f"Start year {congress['startYear']} doesn't match congress number {congress['number']}"
+
+    def test_current_congress_error_handling(self):
+        """Test error handling when Congress API is unavailable."""
+        # This test assumes the API might return a 404 or 500 in some cases
+        response = requests.get(f"{BASE_URL}/api/congress/current", timeout=TIMEOUT)
+        
+        if response.status_code == 404:
+            error_data = response.json()
+            assert "error" in error_data
+            assert "current congress information not available" in error_data["error"].lower()
+        elif response.status_code == 200:
+            # If successful, validate the structure (redundant with other tests but ensures consistency)
+            data = response.json()
+            assert "congress" in data
+        else:
+            # Any other status code should still return valid JSON
+            try:
+                json.loads(response.text)
+            except json.JSONDecodeError:
+                pytest.fail(f"Invalid JSON response for status {response.status_code}")
+
+
 class TestAPIHealth:
     """General API health and connectivity tests."""
 
@@ -395,7 +507,7 @@ class TestAPIHealth:
 
     def test_json_response_validity(self):
         """Test that all endpoints return valid JSON."""
-        endpoints = ["/api/senators/", "/api/representatives/"]
+        endpoints = ["/api/senators/", "/api/representatives/", "/api/congress/current"]
 
         for endpoint in endpoints:
             response = requests.get(f"{BASE_URL}{endpoint}", timeout=TIMEOUT)
@@ -428,6 +540,15 @@ if __name__ == "__main__":
         response = requests.get(f"{BASE_URL}/api/representatives/", timeout=5)
         reps = response.json()
         print(f"✓ Found {len(reps)} representatives")
+
+        response = requests.get(f"{BASE_URL}/api/congress/current", timeout=5)
+        if response.status_code == 200:
+            congress = response.json()
+            congress_info = congress.get("congress", {})
+            congress_number = congress_info.get("number", "unknown")
+            print(f"✓ Current Congress: {congress_number}")
+        else:
+            print(f"⚠ Congress API status: {response.status_code}")
 
         print("\nRun 'pytest tests/test_api.py' for full test suite")
 

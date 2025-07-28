@@ -2,9 +2,9 @@
 
 # 🏛️ Civiliscope
 
-**Civiliscope** is a full-stack web app for visualizing the composition of the U.S. Congress — one seat at a time.
+**Civiliscope** is a transparency platform dedicated to making U.S. Congress accessible and accountable to the American people.
 
-Hover over Senate seats to learn more about each legislator, with data sourced from [congress-legislators](https://github.com/unitedstates/congress-legislators). Easily extendable to the House of Representatives.
+Our mission is to promote congressional transparency by providing real-time data on current legislators, revealing lobbying connections, and empowering citizens with the information they need to hold their representatives accountable. Data sourced from [congress-legislators](https://github.com/unitedstates/congress-legislators).
 
 ---
 
@@ -38,7 +38,7 @@ Hover over Senate seats to learn more about each legislator, with data sourced f
 │   └── ...
 ├── backend/              # Flask API + DB logic
 │   ├── app/
-│   ├── data\_ingestion/
+│   ├── data_ingestion/
 │   ├── Dockerfile
 │   └── ...
 ├── docker-compose.yml
@@ -53,8 +53,8 @@ Hover over Senate seats to learn more about each legislator, with data sourced f
 ### 1. Clone the repo & submodules
 
 ```bash
-git clone https://github.com/yourusername/civiscope.git
-cd civiscope
+git clone https://github.com/yourusername/civiliscope.git
+cd civiliscope
 git submodule update --init --recursive
 ````
 
@@ -72,8 +72,8 @@ docker compose up --build
 
 ```bash
 cd ../frontend
-npm install
-npm run dev
+yarn install
+yarn run dev
 ```
 
 ---
@@ -81,9 +81,12 @@ npm run dev
 ## 🔮 Future Roadmap
 
 * 🎯 Interactive House visualization
-* 🔍 Search + filters by party/state
+* 💰 Lobbying influence tracking and visualization
+* 🔍 Advanced search + filters by party/state/committee
+* 📊 Voting record analysis and transparency tools
 * 🗳️ Election countdown + polling overlays
-* 📈 Visualize changes over time
+* 📈 Legislative activity tracking over time
+* 🤝 Corporate and special interest connections
 
 ---
 
