@@ -84,6 +84,18 @@ curl http://localhost:5050/api/senators
 
 ## 🧪 Developer Utilities
 
+* Build the containers:
+
+```bash
+docker compose up --build
+```
+
+* Remove the containers - reset db:
+
+```bash
+docker compose down -v
+```
+
 * Re-run parser manually:
 
 ```bash

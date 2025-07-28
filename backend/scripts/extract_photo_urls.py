@@ -29,13 +29,13 @@ def extract_photo_urls_to_json():
         senators = Senator.query.all()
         for senator in senators:
             if senator.photo_url:
-                photo_cache[senator.id] = senator.photo_url
+                photo_cache[senator.bioguide_id] = senator.photo_url
 
         # Get all representatives
         representatives = Representative.query.all()
         for rep in representatives:
             if rep.photo_url:
-                photo_cache[rep.id] = rep.photo_url
+                photo_cache[rep.bioguide_id] = rep.photo_url
 
         # Save to JSON file in data_ingestion directory
         data_ingestion_dir = os.path.join(backend_dir, "data_ingestion")

@@ -38,7 +38,7 @@ Hover over Senate seats to learn more about each legislator, with data sourced f
 │   └── ...
 ├── backend/              # Flask API + DB logic
 │   ├── app/
-│   ├── data\_ingestion/
+│   ├── data_ingestion/
 │   ├── Dockerfile
 │   └── ...
 ├── docker-compose.yml
@@ -53,8 +53,8 @@ Hover over Senate seats to learn more about each legislator, with data sourced f
 ### 1. Clone the repo & submodules
 
 ```bash
-git clone https://github.com/yourusername/civiscope.git
-cd civiscope
+git clone https://github.com/yourusername/civiliscope.git
+cd civiliscope
 git submodule update --init --recursive
 ````
 
@@ -72,8 +72,8 @@ docker compose up --build
 
 ```bash
 cd ../frontend
-npm install
-npm run dev
+yarn install
+yarn run dev
 ```
 
 ---

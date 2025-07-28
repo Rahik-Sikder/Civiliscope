@@ -11,7 +11,6 @@ def get_all_senators():
     return jsonify(
         [
             {
-                "id": s.id,
                 "bioguide_id": s.bioguide_id,
                 "name": s.full_name,
                 "state": s.state,
@@ -25,12 +24,11 @@ def get_all_senators():
 
 
 # Limited usecase - default to member api
-@bp.route("/<int:senator_id>", methods=["GET"])
-def get_senator(senator_id):
-    senator = Senator.query.get_or_404(senator_id)
+@bp.route("/<string:bioguide_id>", methods=["GET"])
+def get_senator(bioguide_id):
+    senator = Senator.query.get_or_404(bioguide_id)
     return jsonify(
         {
-            "id": senator.id,
             "bioguide_id": senator.bioguide_id,
             "name": senator.full_name,
             "state": senator.state,

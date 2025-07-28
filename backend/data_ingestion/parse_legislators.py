@@ -96,6 +96,7 @@ def ingest():
             # Get profile image URL using bioguide ID
             print(f"Getting profile image for {full_name} ({bioguide})")
 
+
             photo_url = None
             if bioguide in profile_dict:
                 photo_url = profile_dict[bioguide]
