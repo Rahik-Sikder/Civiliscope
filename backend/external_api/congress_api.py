@@ -155,3 +155,27 @@ class CongressAPI:
         except requests.RequestException as e:
             logger.error(f"Error fetching member {bioguide_id}: {e}")
             return None
+
+    def get_current_congress(self) -> Optional[Dict]:
+        """
+        Get information about the current Congress.
+
+        Returns:
+            Full JSON response from API containing current congress information, or None if error.
+        """
+        try:
+            response = self.session.get(f"{self.BASE_URL}/congress/current")
+            response.raise_for_status()
+
+            data = response.json()
+
+            if data.get("congress"):
+                logger.info(f"Fetched current congress information: Congress {data['congress'].get('number', 'unknown')}")
+            else:
+                logger.warning("No current congress information found in API response")
+
+            return data
+
+        except requests.RequestException as e:
+            logger.error(f"Error fetching current congress information: {e}")
+            return None

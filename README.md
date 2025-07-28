@@ -2,9 +2,9 @@
 
 # 🏛️ Civiliscope
 
-**Civiliscope** is a full-stack web app for visualizing the composition of the U.S. Congress — one seat at a time.
+**Civiliscope** is a transparency platform dedicated to making U.S. Congress accessible and accountable to the American people.
 
-Hover over Senate seats to learn more about each legislator, with data sourced from [congress-legislators](https://github.com/unitedstates/congress-legislators). Easily extendable to the House of Representatives.
+Our mission is to promote congressional transparency by providing real-time data on current legislators, revealing lobbying connections, and empowering citizens with the information they need to hold their representatives accountable. Data sourced from [congress-legislators](https://github.com/unitedstates/congress-legislators).
 
 ---
 
@@ -81,9 +81,12 @@ yarn run dev
 ## 🔮 Future Roadmap
 
 * 🎯 Interactive House visualization
-* 🔍 Search + filters by party/state
+* 💰 Lobbying influence tracking and visualization
+* 🔍 Advanced search + filters by party/state/committee
+* 📊 Voting record analysis and transparency tools
 * 🗳️ Election countdown + polling overlays
-* 📈 Visualize changes over time
+* 📈 Legislative activity tracking over time
+* 🤝 Corporate and special interest connections
 
 ---
 

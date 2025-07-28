@@ -19,10 +19,12 @@ def create_app():
         from .routes import senators
         from .routes import representatives
         from .routes import members
+        from .routes import congress
 
         app.register_blueprint(senators.bp)
         app.register_blueprint(representatives.bp)
         app.register_blueprint(members.bp)
+        app.register_blueprint(congress.bp)
 
         db.create_all()
 
