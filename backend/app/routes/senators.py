@@ -23,6 +23,7 @@ def get_all_senators():
         ]
     )
 
+
 # Limited usecase - default to member api
 @bp.route("/<int:senator_id>", methods=["GET"])
 def get_senator(senator_id):

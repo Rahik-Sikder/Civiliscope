@@ -7,6 +7,7 @@ from .congress_api import CongressAPI
 import logging
 
 logger = logging.getLogger(__name__)
+api = CongressAPI()
 
 
 def get_member_image_urls(save_json: bool = True) -> Dict[str, str]:
@@ -20,7 +21,6 @@ def get_member_image_urls(save_json: bool = True) -> Dict[str, str]:
         Dictionary mapping bioguide ID to image URL.
     """
     try:
-        api = CongressAPI()
         return api.create_bioguide_to_image_url_dict(save_to_file=save_json)
     except Exception as e:
         logger.error(f"Error getting member image URLs: {e}")
@@ -38,7 +38,6 @@ def get_member_details(bioguide_id: str) -> Optional[Dict]:
         Full JSON response from Congress.gov API, or None if not found.
     """
     try:
-        api = CongressAPI()
         return api.get_member(bioguide_id)
     except Exception as e:
         logger.error(f"Error getting member details for {bioguide_id}: {e}")
