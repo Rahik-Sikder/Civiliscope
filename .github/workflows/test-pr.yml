@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     
     # SQLite doesn't require external services
 
@@ -18,7 +18,7 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Set up Python 3.11
+    - name: Set up Python 3.12
       uses: actions/setup-python@v4
       with:
         python-version: '3.12'
@@ -55,7 +55,15 @@ jobs:
         touch instance/test.db
         ls -la instance/
         rm instance/test.db
-    
+        echo "=== Testing database URI resolution ==="
+        python -c "
+import os
+print('DATABASE_URL env var:', os.getenv('DATABASE_URL', 'NOT SET'))
+print('Default would be: sqlite:////app/instance/civiliscope.db')
+print('Working directory:', os.getcwd())
+print('Absolute path would be:', os.path.abspath('instance/civiliscope.db'))
+"
+
     - name: Start Flask backend
       run: |
         cd backend
