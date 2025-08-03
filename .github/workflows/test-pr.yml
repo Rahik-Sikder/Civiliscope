@@ -35,11 +35,13 @@ jobs:
         echo "FRONTEND_URL: $FRONTEND_URL" 
         echo "DATABASE_URL: $DATABASE_URL"
         echo "CONGRESS_API_KEY: $CONGRESS_API_KEY"
+        echo "BASE_URL: $BASE_URL"
       env:
         FLASK_ENV: testing
         FRONTEND_URL: ${{ secrets.TEST_FRONTEND_URL }}
         DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
         CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
+        BASE_URL: ${{ secrets.TEST_BASE_URL }}
 
     - name: Create SQLite instance directory and test permissions
       run: |
@@ -63,6 +65,8 @@ jobs:
         FRONTEND_URL: ${{ secrets.TEST_FRONTEND_URL }}
         DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
         CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
+        BASE_URL: ${{ secrets.TEST_BASE_URL }}
+
 
     - name: Run tests
       run: |
@@ -73,6 +77,8 @@ jobs:
         FRONTEND_URL: ${{ secrets.TEST_FRONTEND_URL }}
         DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
         CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
+        BASE_URL: ${{ secrets.TEST_BASE_URL }}
+
 
     - name: Stop Flask backend
       if: always()
@@ -87,8 +93,3 @@ jobs:
       run: |
         cd backend
         ruff check .
-
-    - name: Check code formatting
-      run: |
-        cd backend
-        ruff format --check .

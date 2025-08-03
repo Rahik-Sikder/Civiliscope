@@ -66,7 +66,9 @@ class TestSenatorAPI:
 
         for senator in senators:
             # Name should not be empty
-            assert senator["name"].strip(), f"Empty name for senator ID {senator['bioguide_id']}"
+            assert senator["name"].strip(), (
+                f"Empty name for senator ID {senator['bioguide_id']}"
+            )
 
             # State should be 2-letter code
             assert len(senator["state"]) == 2, f"Invalid state code: {senator['state']}"
@@ -437,7 +439,7 @@ class TestCongressAPI:
                 session_required_fields = ["chamber", "number", "startDate", "type"]
                 for field in session_required_fields:
                     assert field in session, f"Missing session field: {field}"
-                
+
                 # Validate chamber values
                 assert session["chamber"] in ["House of Representatives", "Senate"]
                 assert session["type"] == "R"  # Regular session
@@ -457,7 +459,7 @@ class TestCongressAPI:
 
             # Basic consistency checks
             assert congress["number"] > 100, "Congress number should be reasonable"
-            
+
             # Start and end years should be reasonable
             start_year = int(congress["startYear"])
             end_year = int(congress["endYear"])
