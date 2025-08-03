@@ -45,6 +45,12 @@ jobs:
       run: |
         cd backend
         mkdir -p instance
+        echo "=== Directory structure ==="
+        pwd
+        ls -la
+        ls -la instance/ || echo "instance dir doesn't exist"
+        echo "=== Current working directory permissions ==="
+        ls -ld .
 
     - name: Start Flask backend
       run: |
