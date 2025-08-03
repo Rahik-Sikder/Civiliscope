@@ -1,0 +1,75 @@
+name: Run Tests on Pull Request
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    # SQLite doesn't require external services
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        cd backend
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Set up environment variables
+      run: |
+        cd backend
+        echo "FLASK_ENV=testing" >> .env
+        echo "FRONTEND_URL=http://localhost:3000" >> .env
+        # DATABASE_URL defaults to SQLite at instance/civiliscope.db
+
+    - name: Create SQLite instance directory
+      run: |
+        cd backend
+        mkdir -p instance
+
+    - name: Start Flask backend
+      run: |
+        cd backend
+        python run.py &
+        echo $! > flask.pid
+        sleep 10
+      env:
+        FLASK_ENV: testing
+
+    - name: Run tests
+      run: |
+        cd backend
+        python run_tests.py all
+
+    - name: Stop Flask backend
+      if: always()
+      run: |
+        cd backend
+        if [ -f flask.pid ]; then
+          kill $(cat flask.pid) || true
+          rm flask.pid
+        fi
+
+    - name: Run linter
+      run: |
+        cd backend
+        ruff check .
+
+    - name: Check code formatting
+      run: |
+        cd backend
+        ruff format --check .
