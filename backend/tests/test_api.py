@@ -66,7 +66,9 @@ class TestSenatorAPI:
 
         for senator in senators:
             # Name should not be empty
-            assert senator["name"].strip(), f"Empty name for senator ID {senator['bioguide_id']}"
+            assert senator["name"].strip(), (
+                f"Empty name for senator ID {senator['bioguide_id']}"
+            )
 
             # State should be 2-letter code
             assert len(senator["state"]) == 2, f"Invalid state code: {senator['state']}"

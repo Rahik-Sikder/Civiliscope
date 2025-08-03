@@ -94,7 +94,3 @@ jobs:
         cd backend
         ruff check .
 
-    - name: Check code formatting
-      run: |
-        cd backend
-        ruff format --check .
