@@ -2,9 +2,10 @@
 Specialized scraper for extracting senator desk assignments from the Senate chamber map.
 """
 
-from selenium.webdriver.common.by import By
-from typing import Dict, Optional
 import time
+
+from selenium.webdriver.common.by import By
+
 from .selenium_web_scraper import SeleniumWebScraper
 
 
@@ -19,7 +20,7 @@ class SenateDeskScraper(SeleniumWebScraper):
         """Initialize the Senate desk scraper with appropriate settings."""
         super().__init__(headless=headless, delay=delay, timeout=timeout)
 
-    def scrape_senators_list(self) -> Dict[str, Dict[str, str]]:
+    def scrape_senators_list(self) -> dict[str, dict[str, str]]:
         """
         Scrape the complete senators list from the Senate chamber desk map.
 
@@ -64,7 +65,7 @@ class SenateDeskScraper(SeleniumWebScraper):
 
         return senators_data
 
-    def _extract_senator_from_item(self, item_element) -> Optional[Dict[str, str]]:
+    def _extract_senator_from_item(self, item_element) -> dict[str, str] | None:
         """
         Extract senator information from a senator list item element.
 
@@ -109,7 +110,7 @@ class SenateDeskScraper(SeleniumWebScraper):
             self.logger.debug(f"Error extracting senator from item element: {e}")
             return None
 
-    def _parse_senator_item_text(self, text: str) -> Dict[str, str]:
+    def _parse_senator_item_text(self, text: str) -> dict[str, str]:
         """
         Parse senator information from list item text content.
 
@@ -182,14 +183,14 @@ class SenateDeskScraper(SeleniumWebScraper):
 
         return info
 
-    def _parse_senator_text(self, text: str) -> Dict[str, str]:
+    def _parse_senator_text(self, text: str) -> dict[str, str]:
         """
         Legacy parsing method for backward compatibility.
         Redirects to the new parsing method.
         """
         return self._parse_senator_item_text(text)
 
-    def _extract_desk_number(self, href: str) -> Optional[str]:
+    def _extract_desk_number(self, href: str) -> str | None:
         """
         Extract desk number from href attribute.
 
@@ -208,7 +209,7 @@ class SenateDeskScraper(SeleniumWebScraper):
 
         return None
 
-    def _check_for_tooltip_info(self) -> Optional[Dict[str, str]]:
+    def _check_for_tooltip_info(self) -> dict[str, str] | None:
         """
         Check for tooltip or popup information that might appear after clicking.
 
@@ -240,7 +241,7 @@ class SenateDeskScraper(SeleniumWebScraper):
 
         return None
 
-    def scrape_with_dropdown_interaction(self) -> Dict[str, Dict[str, Dict[str, str]]]:
+    def scrape_with_dropdown_interaction(self) -> dict[str, dict[str, dict[str, str]]]:
         """
         Scrape senator information by interacting with dropdown menus for different years.
 

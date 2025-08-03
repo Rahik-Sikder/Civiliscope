@@ -17,14 +17,19 @@ module.exports = {
           'light-gray': '#3a3a3a',
           'neon-red': '#ff1744',
           'neon-blue': '#00b4ff',
+          'neon-purple': '#9d4edd',
           'neon-red-glow': '#ff4569',
           'neon-blue-glow': '#33c4ff',
+          'neon-purple-glow': '#b068ee',
         }
       },
       animation: {
-        'glow-red': 'glow-red 2s ease-in-out infinite alternate',
-        'glow-blue': 'glow-blue 2s ease-in-out infinite alternate',
+        'glow-red': 'glow-red .5s ease-in-out infinite alternate',
+        'glow-blue': 'glow-blue .5s ease-in-out infinite alternate',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'loading-dot': 'loadingDot 1.4s ease-in-out infinite',
+        'loading-dot-slow': 'loadingDot 2s ease-in-out infinite',
+        'loading-dot-fast': 'loadingDot 0.8s ease-in-out infinite',
       },
       keyframes: {
         'glow-red': {
@@ -34,6 +39,16 @@ module.exports = {
         'glow-blue': {
           'from': { 'box-shadow': '0 0 5px #00b4ff, 0 0 10px #00b4ff, 0 0 15px #00b4ff' },
           'to': { 'box-shadow': '0 0 10px #00b4ff, 0 0 20px #00b4ff, 0 0 30px #00b4ff' }
+        },
+        'loadingDot': {
+          '0%, 80%, 100%': { 
+            transform: 'scale(0.7)', 
+            opacity: '.5' 
+          },
+          '40%': { 
+            transform: 'scale(1.2)', 
+            opacity: '1' 
+          }
         }
       },
       backgroundImage: {

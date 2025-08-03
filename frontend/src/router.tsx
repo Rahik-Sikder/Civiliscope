@@ -3,6 +3,7 @@ import HomePage from './pages/Home/HomePage.tsx';
 import SenatePage from './pages/Senate/SenatePage.tsx';
 import HousePage from './pages/House/HousePage.tsx';
 import LegislatorPage from './pages/Legislator/LegislatorPage.tsx';
+import BillsPage from './pages/Bills/BillsPage.tsx';
 import { DebugPage } from './debug/DebugPage.tsx';
 
 export default function Router() {
@@ -12,6 +13,7 @@ export default function Router() {
         <Route path="/" element={<HomePage />} />
         <Route path="/senate" element={<SenatePage />} />
         <Route path="/house" element={<HousePage />} />
+        <Route path="/bills" element={<BillsPage />} />
         <Route path="/legislator/:bioguideId" element={<LegislatorPage />} />
         <Route path="/debug" element={<DebugPage />} />
         {/* Future routes here */}

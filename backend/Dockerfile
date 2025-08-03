@@ -54,6 +54,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# Create instance directory for SQLite database
+RUN mkdir -p /app/instance
 
 RUN chmod +x /app/start.sh
+
+# Expose port 5000 for Elastic Beanstalk
+EXPOSE 5000
+
 CMD ["./start.sh"]

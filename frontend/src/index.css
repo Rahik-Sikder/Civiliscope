@@ -7,8 +7,10 @@
   --color-patriot-light-gray: #3a3a3a;
   --color-patriot-neon-red: #ff1744;
   --color-patriot-neon-blue: #00b4ff;
+  --color-patriot-neon-purple: #9d4edd;
   --color-patriot-neon-red-glow: #ff4569;
   --color-patriot-neon-blue-glow: #33c4ff;
+  --color-patriot-neon-purple-glow: #b068ee;
 }
 
 /* Patriotic Dark Theme - Modern & Sleek */
@@ -19,8 +21,10 @@
   --patriot-light-gray: #3a3a3a;
   --patriot-neon-red: #ff1744;
   --patriot-neon-blue: #00b4ff;
+  --patriot-neon-purple: #9d4edd;
   --patriot-neon-red-glow: #ff4569;
   --patriot-neon-blue-glow: #33c4ff;
+  --patriot-neon-purple-glow: #b068ee;
 }
 
 /* Global Dark Theme */

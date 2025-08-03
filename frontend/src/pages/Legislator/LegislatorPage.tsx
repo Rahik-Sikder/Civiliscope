@@ -7,6 +7,7 @@ import LeadershipRoles from '../../components/member/LeadershipRoles';
 import LegislativeStats from '../../components/member/LegislativeStats';
 import InfoCard from '../../components/shared/InfoCard';
 import Breadcrumb from '../../components/shared/Breadcrumb';
+import LoadingDots from '../../components/shared/LoadingDots';
 
 export default function LegislatorPage() {
   const { bioguideId } = useParams<{ bioguideId: string }>();
@@ -30,8 +31,8 @@ export default function LegislatorPage() {
       <MainLayout>
         <div className="container mx-auto px-6 py-12">
           <div className="flex flex-col items-center justify-center min-h-[400px]">
-            <div className="loading loading-spinner loading-lg text-patriot-neon-blue"></div>
-            <p className="text-white mt-4">Loading member information...</p>
+            <LoadingDots size="large" dotColor="#ff1744" glowColor="rgba(255,23,68,0.3)" speed="normal" />
+            <p className="text-white mt-6">Loading member information...</p>
           </div>
         </div>
       </MainLayout>

@@ -3,7 +3,6 @@ Flask-SQLAlchemy
 Flask-CORS
 python-dotenv
 firebase-admin
-psycopg2-binary
 gunicorn
 pyyaml
 requests
