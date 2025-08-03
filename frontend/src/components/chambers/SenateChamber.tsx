@@ -3,6 +3,7 @@ import "./Chamber.css";
 import { senatorDesks } from "./senatorDesks";
 import { useSenators } from "../../hooks/useSenators";
 import { useLegislatorStore } from "../../store/legislatorStore";
+import LoadingDots from "../shared/LoadingDots";
 import type { Senator } from "../../types/senator";
 
 interface SenateChamberProps {
@@ -73,7 +74,8 @@ export default function SenateChamber({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-20">
+      <div className="flex flex-col items-center justify-center py-20 space-y-4">
+        <LoadingDots variant="purple" size="medium" speed="normal" />
         <div className="text-white">Loading senators...</div>
       </div>
     );

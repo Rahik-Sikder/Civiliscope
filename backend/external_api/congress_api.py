@@ -2,11 +2,11 @@
 Congress.gov API client
 """
 
-import requests
-import os
 import json
-from typing import Dict, List, Optional
 import logging
+import os
+
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ class CongressAPI:
 
     BASE_URL = "https://api.congress.gov/v3"
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: str | None = None):
         """
         Initialize the Congress API client.
 
@@ -34,7 +34,7 @@ class CongressAPI:
             {"X-API-Key": self.api_key, "Content-Type": "application/json"}
         )
 
-    def get_current_members(self, chamber: Optional[str] = None) -> List[Dict]:
+    def get_current_members(self, chamber: str | None = None) -> list[dict]:
         """
         Fetch all current congressional members.
 
@@ -85,8 +85,8 @@ class CongressAPI:
         return members
 
     def create_bioguide_to_image_url_dict(
-        self, save_to_file: bool = True, filepath: Optional[str] = None
-    ) -> Dict[str, str]:
+        self, save_to_file: bool = True, filepath: str | None = None
+    ) -> dict[str, str]:
         """
         Create a dictionary mapping bioguide IDs to image URLs from Congress.gov API.
 
@@ -129,7 +129,7 @@ class CongressAPI:
 
         return bioguide_to_url
 
-    def get_member(self, bioguide_id: str) -> Optional[Dict]:
+    def get_member(self, bioguide_id: str) -> dict | None:
         """
         Get specific member information by bioguide ID.
 
@@ -156,7 +156,7 @@ class CongressAPI:
             logger.error(f"Error fetching member {bioguide_id}: {e}")
             return None
 
-    def get_current_congress(self) -> Optional[Dict]:
+    def get_current_congress(self) -> dict | None:
         """
         Get information about the current Congress.
 
@@ -170,7 +170,9 @@ class CongressAPI:
             data = response.json()
 
             if data.get("congress"):
-                logger.info(f"Fetched current congress information: Congress {data['congress'].get('number', 'unknown')}")
+                logger.info(
+                    f"Fetched current congress information: Congress {data['congress'].get('number', 'unknown')}"
+                )
             else:
                 logger.warning("No current congress information found in API response")
 
@@ -178,4 +180,88 @@ class CongressAPI:
 
         except requests.RequestException as e:
             logger.error(f"Error fetching current congress information: {e}")
+            return None
+
+    def get_bills_for_congress(
+        self, congress_number: int, limit: int | None = None, offset: int | None = None
+    ) -> dict | None:
+        """
+        Get bills for a specific congress.
+
+        Args:
+            congress_number: The congress number to fetch bills for.
+            limit: Optional maximum number of bills to return.
+            offset: Optional offset for pagination.
+
+        Returns:
+            Full JSON response from API containing bills for the congress, or None if error.
+        """
+        try:
+            params = {"format": "json"}
+
+            if limit is not None:
+                params["limit"] = limit
+            if offset is not None:
+                params["offset"] = offset
+
+            response = self.session.get(
+                f"{self.BASE_URL}/bill/{congress_number}", params=params
+            )
+            response.raise_for_status()
+
+            data = response.json()
+
+            if data.get("bills"):
+                logger.info(
+                    f"Fetched {len(data['bills'])} bills for Congress {congress_number}"
+                )
+            else:
+                logger.warning(f"No bills found for Congress {congress_number}")
+
+            return data
+
+        except requests.RequestException as e:
+            logger.error(f"Error fetching bills for Congress {congress_number}: {e}")
+            return None
+
+    def get_bill_actions(
+        self, congress: int, bill_type: str, bill_number: int
+    ) -> dict | None:
+        """
+        Get actions for a specific bill.
+
+        Args:
+            congress: The congress number.
+            bill_type: The type of bill (e.g., 'hr', 's', 'hjres', 'sjres').
+            bill_number: The bill number.
+
+        Returns:
+            Full JSON response from API containing bill actions, or None if error.
+        """
+        try:
+            params = {"format": "json"}
+
+            response = self.session.get(
+                f"{self.BASE_URL}/bill/{congress}/{bill_type}/{bill_number}/actions",
+                params=params,
+            )
+            response.raise_for_status()
+
+            data = response.json()
+
+            if data.get("actions"):
+                logger.info(
+                    f"Fetched {len(data['actions'])} actions for bill {bill_type.upper()}{bill_number} (Congress {congress})"
+                )
+            else:
+                logger.warning(
+                    f"No actions found for bill {bill_type.upper()}{bill_number} (Congress {congress})"
+                )
+
+            return data
+
+        except requests.RequestException as e:
+            logger.error(
+                f"Error fetching actions for bill {bill_type.upper()}{bill_number} (Congress {congress}): {e}"
+            )
             return None

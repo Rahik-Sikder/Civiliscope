@@ -41,6 +41,15 @@ export default function Header() {
                             <div className="absolute inset-0 bg-patriot-gray/50 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
                             <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-patriot-neon-blue group-hover:w-full transition-all duration-300"></div>
                         </Link>
+                        
+                        <Link
+                            to="/bills"
+                            className="group relative px-6 py-3 text-white font-medium tracking-wide overflow-hidden rounded-lg transition-all duration-300 hover:text-patriot-neon-purple"
+                        >
+                            <span className="relative z-10">BILLS</span>
+                            <div className="absolute inset-0 bg-patriot-gray/50 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                            <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-patriot-neon-purple group-hover:w-full transition-all duration-300"></div>
+                        </Link>
 
                         <div className="w-px h-6 bg-gradient-to-b from-patriot-neon-red to-patriot-neon-blue mx-4"></div>
                         

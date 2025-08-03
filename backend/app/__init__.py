@@ -26,6 +26,16 @@ def create_app():
         app.register_blueprint(members.bp)
         app.register_blueprint(congress.bp)
 
+        # Health check endpoint for EB
+        @app.route('/health')
+        def health_check():
+            return {'status': 'healthy'}, 200
+        
+        # Root endpoint for ELB health checks
+        @app.route('/')
+        def root():
+            return {'status': 'ok', 'message': 'Civiliscope Backend API'}, 200
+
         db.create_all()
 
     return app

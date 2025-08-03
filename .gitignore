@@ -11,7 +11,7 @@ build/
 
 # Virtualenv / pipenv
 .venv/
-.env
+.env*
 .flaskenv
 
 # Docker
@@ -37,3 +37,8 @@ data-ingestion/__pycache__/
 
 # Firebase secrets (if stored locally)
 firebase-adminsdk.json
+
+# EB related
+.ebextensions
+.ebignore
+Dockerrun.aws.json

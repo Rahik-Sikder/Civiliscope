@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import MainLayout from "../../components/layout/MainLayout";
 import { useCongress } from "../../hooks/useCongress";
+import LoadingDots from "../../components/shared/LoadingDots";
 
 export default function HomePage() {
   const { data: congress, isLoading, error } = useCongress();
@@ -106,7 +107,7 @@ export default function HomePage() {
           <div className="glass-dark border-y border-patriot-neon-blue/20">
             <div className="container mx-auto px-6 py-16">
               <div className="text-center">
-                <div className="text-patriot-neon-blue animate-pulse">Loading congress information...</div>
+                <LoadingDots variant="purple" size="large" speed="normal"/>
               </div>
             </div>
           </div>

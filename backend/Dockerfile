@@ -56,4 +56,8 @@ COPY . .
 
 
 RUN chmod +x /app/start.sh
+
+# Expose port 5000 for Elastic Beanstalk
+EXPOSE 5000
+
 CMD ["./start.sh"]
