@@ -51,10 +51,6 @@ jobs:
         ls -la instance/ || echo "instance dir doesn't exist"
         echo "=== Current working directory permissions ==="
         ls -ld .
-        echo "=== Testing SQLite file creation ==="
-        touch instance/test.db
-        ls -la instance/
-        rm instance/test.db
 
     - name: Start Flask backend
       run: |
