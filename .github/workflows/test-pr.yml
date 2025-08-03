@@ -55,14 +55,6 @@ jobs:
         touch instance/test.db
         ls -la instance/
         rm instance/test.db
-        echo "=== Testing database URI resolution ==="
-        python -c "
-import os
-print('DATABASE_URL env var:', os.getenv('DATABASE_URL', 'NOT SET'))
-print('Default would be: sqlite:////app/instance/civiliscope.db')
-print('Working directory:', os.getcwd())
-print('Absolute path would be:', os.path.abspath('instance/civiliscope.db'))
-"
 
     - name: Start Flask backend
       run: |
