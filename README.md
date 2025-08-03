@@ -18,7 +18,7 @@ Our mission is to promote congressional transparency by providing real-time data
 ### 🔙 Backend
 - **Python 3.12**
 - **Flask** (served via Gunicorn)
-- **SQLAlchemy + PostgreSQL**
+- **SQLAlchemy + SQLite**
 - **Data ingestion** from YAML via [congress-legislators](https://github.com/unitedstates/congress-legislators)
 - **Docker + Docker Compose**
 - **Deployed on AWS Elastic Beanstalk**

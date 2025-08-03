@@ -2,7 +2,7 @@
 
 # Civiliscope Backend
 
-The backend service powering Civiliscope — a visual and interactive platform for exploring U.S. Congressional seats. This Flask-based API exposes structured data on Senators and Representatives using a PostgreSQL database and data from the [congress-legislators](https://github.com/unitedstates/congress-legislators) project.
+The backend service powering Civiliscope — a visual and interactive platform for exploring U.S. Congressional seats. This Flask-based API exposes structured data on Senators and Representatives using a SQLite database and data from the [congress-legislators](https://github.com/unitedstates/congress-legislators) project.
 
 ---
 
@@ -11,7 +11,7 @@ The backend service powering Civiliscope — a visual and interactive platform f
 - **Python 3.12**
 - **Flask** (served via Gunicorn)
 - **SQLAlchemy** for ORM
-- **PostgreSQL** for data storage
+- **SQLite** for data storage
 - **Docker + Docker Compose** for containerized setup
 - **Data ingestion** via YAML parser and Git submodules
 
@@ -37,10 +37,9 @@ touch .env
 And add:
 
 ```env
-DATABASE_URL=postgresql://postgres:yourpassword@db:5432/congress_db
+FRONTEND_URL=http://localhost:3000
+# DATABASE_URL is optional - defaults to SQLite at instance/civiliscope.db
 ```
-
-Make sure this matches your `docker-compose.yml` settings.
 
 ---
 
@@ -52,7 +51,7 @@ docker compose up --build
 
 This will:
 
-* Build the Flask and PostgreSQL containers
+* Build the Flask container
 * Automatically run the legislator parser to populate the DB
 * Launch the Flask API server on port `5050`
 
@@ -60,16 +59,23 @@ This will:
 
 ### 4. Verify the data
 
-To check that senators/representatives were added:
+To check that senators/representatives were added, use the API:
 
 ```bash
-docker compose exec db psql -U postgres -d congress_db
+curl http://localhost:5050/api/senators
+curl http://localhost:5050/api/representatives
 ```
 
-Then inside `psql`:
+Or check the SQLite database directly:
+
+```bash
+docker compose exec backend sqlite3 instance/civiliscope.db
+```
+
+Then inside `sqlite3`:
 
 ```sql
-\dt
+.tables
 SELECT * FROM senators LIMIT 5;
 SELECT * FROM representatives LIMIT 5;
 ```
