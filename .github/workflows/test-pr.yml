@@ -29,13 +29,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Set up environment variables
+    - name: Debug environment variables
       run: |
-        cd backend
-        echo "FLASK_ENV=testing" >> .env
-        echo "FRONTEND_URL=${{ secrets.TEST_FRONTEND_URL }}" >> .env
-        echo "DATABASE_URL=${{ secrets.TEST_DATABASE_URL }}" >> .env
-        echo "CONGRESS_API_KEY=${{ secrets.CONGRESS_API_KEY }}" >> .env
+        echo "FLASK_ENV: $FLASK_ENV"
+        echo "FRONTEND_URL: $FRONTEND_URL" 
+        echo "DATABASE_URL: $DATABASE_URL"
+        echo "CONGRESS_API_KEY: $CONGRESS_API_KEY"
+      env:
+        FLASK_ENV: testing
+        FRONTEND_URL: ${{ secrets.TEST_FRONTEND_URL }}
+        DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+        CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
 
     - name: Create SQLite instance directory
       run: |
@@ -50,11 +54,19 @@ jobs:
         sleep 10
       env:
         FLASK_ENV: testing
+        FRONTEND_URL: ${{ secrets.TEST_FRONTEND_URL }}
+        DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+        CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
 
     - name: Run tests
       run: |
         cd backend
         python run_tests.py all
+      env:
+        FLASK_ENV: testing
+        FRONTEND_URL: ${{ secrets.TEST_FRONTEND_URL }}
+        DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+        CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
 
     - name: Stop Flask backend
       if: always()
