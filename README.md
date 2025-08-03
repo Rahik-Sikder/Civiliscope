@@ -30,21 +30,22 @@ Our mission is to promote congressional transparency by providing real-time data
 
 ## 🧭 Directory Structure
 
-````
-
+```
 .
-├── frontend/             # React app
-│   ├── src/
-│   └── ...
-├── backend/              # Flask API + DB logic
-│   ├── app/
-│   ├── data_ingestion/
-│   ├── Dockerfile
-│   └── ...
-├── docker-compose.yml
-├── README.md             # ← You are here
-
-````
+├── .github/workflows/    # GitHub Actions CI/CD
+├── frontend/             # React app (Vite + TypeScript)
+│   ├── src/components/   # Reusable UI components
+│   ├── src/pages/        # Route-based page components
+│   ├── src/services/     # API client services
+│   └── src/hooks/        # Custom React hooks
+├── backend/              # Flask API + SQLite DB
+│   ├── app/              # Flask application
+│   ├── data_ingestion/   # YAML parsing & web scraping
+│   ├── tests/            # API integration tests
+│   ├── instance/         # SQLite database storage
+│   └── docker-compose.yml
+└── README.md             # ← You are here
+```
 
 ---
 
@@ -53,16 +54,16 @@ Our mission is to promote congressional transparency by providing real-time data
 ### 1. Clone the repo & submodules
 
 ```bash
-git clone https://github.com/yourusername/civiliscope.git
-cd civiliscope
+git clone https://github.com/Rahik-Sikder/Civiliscope.git
+cd Civiliscope
 git submodule update --init --recursive
-````
+```
 
 ### 2. Run the backend
 
 ```bash
 cd backend
-cp .env.example .env  # or create your own
+touch .env  # Create empty .env file (optional - defaults work)
 docker compose up --build
 ```
 
@@ -72,9 +73,31 @@ docker compose up --build
 
 ```bash
 cd ../frontend
-yarn install
-yarn run dev
+npm install
+npm run dev
 ```
+
+---
+
+## 🧪 Testing & Development
+
+### Running Tests
+```bash
+cd backend
+python run_tests.py all
+```
+
+### Code Quality
+```bash
+cd backend
+ruff check .      # Linting
+ruff format .     # Code formatting
+```
+
+### Continuous Integration
+- GitHub Actions automatically runs tests on pull requests
+- Includes linting, formatting, and API integration tests
+- Uses SQLite for simplified test environment
 
 ---
 
