@@ -437,7 +437,7 @@ class TestCongressAPI:
                 session_required_fields = ["chamber", "number", "startDate", "type"]
                 for field in session_required_fields:
                     assert field in session, f"Missing session field: {field}"
-                
+
                 # Validate chamber values
                 assert session["chamber"] in ["House of Representatives", "Senate"]
                 assert session["type"] == "R"  # Regular session
@@ -457,7 +457,7 @@ class TestCongressAPI:
 
             # Basic consistency checks
             assert congress["number"] > 100, "Congress number should be reasonable"
-            
+
             # Start and end years should be reasonable
             start_year = int(congress["startYear"])
             end_year = int(congress["endYear"])
