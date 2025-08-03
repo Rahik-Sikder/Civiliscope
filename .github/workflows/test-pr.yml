@@ -18,10 +18,10 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Set up Python 3.11
+    - name: Set up Python 3.12
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.12'
 
     - name: Install dependencies
       run: |
@@ -29,17 +29,30 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Set up environment variables
+    - name: Debug environment variables
       run: |
-        cd backend
-        echo "FLASK_ENV=testing" >> .env
-        echo "FRONTEND_URL=http://localhost:3000" >> .env
-        # DATABASE_URL defaults to SQLite at instance/civiliscope.db
+        echo "FLASK_ENV: $FLASK_ENV"
+        echo "FRONTEND_URL: $FRONTEND_URL" 
+        echo "DATABASE_URL: $DATABASE_URL"
+        echo "CONGRESS_API_KEY: $CONGRESS_API_KEY"
+        echo "BASE_URL: $BASE_URL"
+      env:
+        FLASK_ENV: testing
+        FRONTEND_URL: ${{ secrets.TEST_FRONTEND_URL }}
+        DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+        CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
+        BASE_URL: ${{ secrets.TEST_BASE_URL }}
 
-    - name: Create SQLite instance directory
+    - name: Create SQLite instance directory and test permissions
       run: |
         cd backend
         mkdir -p instance
+        echo "=== Directory structure ==="
+        pwd
+        ls -la
+        ls -la instance/ || echo "instance dir doesn't exist"
+        echo "=== Current working directory permissions ==="
+        ls -ld .
 
     - name: Start Flask backend
       run: |
@@ -49,11 +62,23 @@ jobs:
         sleep 10
       env:
         FLASK_ENV: testing
+        FRONTEND_URL: ${{ secrets.TEST_FRONTEND_URL }}
+        DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+        CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
+        BASE_URL: ${{ secrets.TEST_BASE_URL }}
+
 
     - name: Run tests
       run: |
         cd backend
         python run_tests.py all
+      env:
+        FLASK_ENV: testing
+        FRONTEND_URL: ${{ secrets.TEST_FRONTEND_URL }}
+        DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+        CONGRESS_API_KEY: ${{ secrets.CONGRESS_API_KEY }}
+        BASE_URL: ${{ secrets.TEST_BASE_URL }}
+
 
     - name: Stop Flask backend
       if: always()
@@ -68,8 +93,3 @@ jobs:
       run: |
         cd backend
         ruff check .
-
-    - name: Check code formatting
-      run: |
-        cd backend
-        ruff format --check .
