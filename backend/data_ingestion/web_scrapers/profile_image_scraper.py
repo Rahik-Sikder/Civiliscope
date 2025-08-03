@@ -6,9 +6,10 @@ The Congress.gov API now provides direct access to member images via the /member
 making this web scraping approach unnecessary. See backend/external_api/congress_api.py instead.
 """
 
-from selenium.webdriver.common.by import By
-from typing import Optional
 import time
+
+from selenium.webdriver.common.by import By
+
 from .selenium_web_scraper import SeleniumWebScraper
 
 
@@ -23,7 +24,7 @@ class ProfileImageScraper(SeleniumWebScraper):
         """Initialize the profile image scraper with appropriate settings."""
         super().__init__(headless=headless, delay=delay, timeout=timeout)
 
-    def get_profile_image_url(self, bioguide: str) -> Optional[str]:
+    def get_profile_image_url(self, bioguide: str) -> str | None:
         """
         Extract the profile image URL for a legislator given their bioguide ID.
 
@@ -62,7 +63,7 @@ class ProfileImageScraper(SeleniumWebScraper):
             self.logger.error(f"Error extracting profile image for {bioguide}: {e}")
             return None
 
-    def _extract_image_url(self) -> Optional[str]:
+    def _extract_image_url(self) -> str | None:
         """
         Extract the image URL from the current bioguide page.
 

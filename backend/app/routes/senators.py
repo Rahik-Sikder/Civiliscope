@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+
 from ..models import Senator
 
 bp = Blueprint("senators", __name__, url_prefix="/api/senators")

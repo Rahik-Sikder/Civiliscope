@@ -54,6 +54,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+# Create instance directory for SQLite database
+RUN mkdir -p /app/instance
 
 RUN chmod +x /app/start.sh
 

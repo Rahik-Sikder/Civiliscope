@@ -6,8 +6,8 @@ Runs tests against your running Civiliscope backend.
 
 import subprocess
 import sys
+
 import requests
-import time
 
 BASE_URL = "http://localhost:5000"
 

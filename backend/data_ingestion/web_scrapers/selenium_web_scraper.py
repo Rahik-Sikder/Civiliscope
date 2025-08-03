@@ -4,19 +4,20 @@ Designed to be reusable across different scraping use cases, with support for
 JavaScript-rendered content and interactive elements.
 """
 
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
+import logging
 import os
 import shutil
-from bs4 import BeautifulSoup
-from typing import List, Dict, Optional, Union, Callable
 import time
-import logging
+from collections.abc import Callable
+
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class SeleniumWebScraper:
@@ -110,7 +111,7 @@ class SeleniumWebScraper:
             except ImportError:
                 raise RuntimeError(
                     "No ChromeDriver found and webdriver-manager not available"
-                )
+                ) from ImportError
 
         driver = webdriver.Chrome(service=service, options=chrome_options)
 
@@ -163,7 +164,7 @@ class SeleniumWebScraper:
             self.logger.error(f"Error navigating to {url}: {e}")
             return False
 
-    def get_page_source(self) -> Optional[BeautifulSoup]:
+    def get_page_source(self) -> BeautifulSoup | None:
         """
         Get the current page source as a BeautifulSoup object.
 
@@ -178,7 +179,7 @@ class SeleniumWebScraper:
             return None
 
     def wait_for_element_by_id(
-        self, element_id: str, timeout: Optional[int] = None
+        self, element_id: str, timeout: int | None = None
     ) -> bool:
         """
         Wait for an element with specific ID to be present and visible.
@@ -192,7 +193,7 @@ class SeleniumWebScraper:
         """
         try:
             wait_time = timeout or self.timeout
-            element = WebDriverWait(self.driver, wait_time).until(
+            WebDriverWait(self.driver, wait_time).until(
                 EC.presence_of_element_located((By.ID, element_id))
             )
             return True
@@ -202,7 +203,7 @@ class SeleniumWebScraper:
             )
             return False
 
-    def find_element_by_id(self, element_id: str) -> Optional[object]:
+    def find_element_by_id(self, element_id: str) -> object | None:
         """
         Find an element by its ID using Selenium WebDriver.
 
@@ -219,7 +220,7 @@ class SeleniumWebScraper:
             self.logger.warning(f"Element with ID '{element_id}' not found")
             return None
 
-    def find_elements_by_class(self, class_name: str, tag: str = None) -> List[object]:
+    def find_elements_by_class(self, class_name: str, tag: str = None) -> list[object]:
         """
         Find HTML elements by their class name using Selenium WebDriver.
 
@@ -245,7 +246,7 @@ class SeleniumWebScraper:
             self.logger.error(f"Error finding elements by class '{class_name}': {e}")
             return []
 
-    def find_elements_by_tag(self, tag: str) -> List[object]:
+    def find_elements_by_tag(self, tag: str) -> list[object]:
         """
         Find HTML elements by tag name using Selenium WebDriver.
 
@@ -264,8 +265,8 @@ class SeleniumWebScraper:
             return []
 
     def extract_text_from_elements(
-        self, elements: List[object], strip: bool = True
-    ) -> List[str]:
+        self, elements: list[object], strip: bool = True
+    ) -> list[str]:
         """
         Extract text content from a list of WebDriver elements.
 
@@ -289,8 +290,8 @@ class SeleniumWebScraper:
         return texts
 
     def extract_links_from_elements(
-        self, elements: List[object]
-    ) -> List[Dict[str, str]]:
+        self, elements: list[object]
+    ) -> list[dict[str, str]]:
         """
         Extract links (href attributes) from a list of WebDriver elements.
 

@@ -7,12 +7,12 @@ import json
 import os
 import sys
 
+from app import create_app
+from app.models import Representative, Senator
+
 # Add the backend directory to Python path
 backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, backend_dir)
-
-from app import create_app, db
-from app.models import Senator, Representative
 
 
 def extract_photo_urls_to_json():

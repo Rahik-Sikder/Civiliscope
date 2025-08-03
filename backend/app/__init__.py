@@ -1,6 +1,7 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+
 from .config import Config
 
 db = SQLAlchemy()
@@ -16,10 +17,7 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        from .routes import senators
-        from .routes import representatives
-        from .routes import members
-        from .routes import congress
+        from .routes import congress, members, representatives, senators
 
         app.register_blueprint(senators.bp)
         app.register_blueprint(representatives.bp)
@@ -27,14 +25,14 @@ def create_app():
         app.register_blueprint(congress.bp)
 
         # Health check endpoint for EB
-        @app.route('/health')
+        @app.route("/health")
         def health_check():
-            return {'status': 'healthy'}, 200
-        
+            return {"status": "healthy"}, 200
+
         # Root endpoint for ELB health checks
-        @app.route('/')
+        @app.route("/")
         def root():
-            return {'status': 'ok', 'message': 'Civiliscope Backend API'}, 200
+            return {"status": "ok", "message": "Civiliscope Backend API"}, 200
 
         db.create_all()
 

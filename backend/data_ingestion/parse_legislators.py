@@ -1,12 +1,14 @@
-import os
-import yaml
 import json
+import os
 from datetime import datetime
+
+import yaml
+
 from app import create_app, db
-from app.models import Senator, Representative
-from .web_scrapers import SenateDeskScraper, ProfileImageScraper
+from app.models import Representative, Senator
 from external_api.services import get_member_image_urls
 
+from .web_scrapers import ProfileImageScraper, SenateDeskScraper
 
 DATA_FILE = os.path.join(os.path.dirname(__file__), "congress/legislators-current.yaml")
 PHOTO_CACHE_FILE = os.path.join(os.path.dirname(__file__), "photo_url_cache.json")
@@ -19,7 +21,7 @@ _photo_cache = None
 
 
 def load_yaml():
-    with open(DATA_FILE, "r") as f:
+    with open(DATA_FILE) as f:
         return yaml.safe_load(f)
 
 
@@ -39,7 +41,7 @@ def load_photo_cache():
 
     try:
         if os.path.exists(PHOTO_CACHE_FILE):
-            with open(PHOTO_CACHE_FILE, "r") as f:
+            with open(PHOTO_CACHE_FILE) as f:
                 _photo_cache = json.load(f)
                 print(f"Loaded {len(_photo_cache)} cached photo URLs")
         else:
@@ -95,7 +97,6 @@ def ingest():
 
             # Get profile image URL using bioguide ID
             print(f"Getting profile image for {full_name} ({bioguide})")
-
 
             photo_url = None
             if bioguide in profile_dict:

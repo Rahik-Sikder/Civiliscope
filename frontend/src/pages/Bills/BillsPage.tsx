@@ -135,83 +135,6 @@ export default function BillsPage() {
     );
   };
 
-  if (error) {
-    return (
-      <MainLayout>
-        <div className="min-h-screen cyber-grid">
-          <div className="container mx-auto px-6 py-8">
-            <PageHeader
-              title="BILLS"
-              description="Explore current congressional bills and their legislative journey"
-              descriptionMaxWidth="max-w-3xl"
-              additionalContent={header_info()}
-            />
-
-            {/* Search and Filters - Disabled state */}
-            <div className="glass-dark rounded-xl p-6 mb-8 space-y-4 opacity-50">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="md:col-span-2">
-                  <input
-                    type="text"
-                    placeholder="Search bills by title, number, or type..."
-                    disabled
-                    className="w-full px-4 py-2 bg-patriot-darker border border-patriot-neon-blue/30 rounded-lg text-white placeholder-gray-400"
-                  />
-                </div>
-                <div>
-                  <select
-                    disabled
-                    className="w-full px-4 py-2 bg-patriot-darker border border-patriot-neon-blue/30 rounded-lg text-white"
-                  >
-                    <option>All Types</option>
-                  </select>
-                </div>
-                <div>
-                  <select
-                    disabled
-                    className="w-full px-4 py-2 bg-patriot-darker border border-patriot-neon-blue/30 rounded-lg text-white"
-                  >
-                    <option>All Chambers</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            {/* Split View Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8">
-              {/* Bills List - Error state */}
-              <div className="space-y-4 min-w-0">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center space-x-2">
-                  <span>📋</span>
-                  <span>Bills List</span>
-                </h2>
-                <div className="space-y-3 p-3 max-h-screen overflow-y-auto">
-                  <div className="glass-dark rounded-lg p-8 text-center">
-                    <p className="text-patriot-neon-red">
-                      Unable to load bills data. Please try again later.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bill Actions - Error state */}
-              <div className="space-y-4 min-w-0">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center space-x-2">
-                  <span>⚡</span>
-                  <span>Bill Actions</span>
-                </h2>
-                <div className="glass-dark rounded-lg p-8 text-center">
-                  <p className="text-gray-400">
-                    Select a bill to view its actions
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </MainLayout>
-    );
-  }
 
   return (
     <MainLayout>
@@ -225,7 +148,7 @@ export default function BillsPage() {
           />
 
           {/* Search and Filters */}
-          <div className="glass-dark rounded-xl p-6 mb-8 space-y-4">
+          <div className="glass-dark rounded-xl p-6 mt-4 mb-4 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {/* Search */}
               <div className="md:col-span-2">
@@ -281,7 +204,7 @@ export default function BillsPage() {
           {/* Split View Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8">
             {/* Bills List */}
-            <div className="space-y-4 min-w-0">
+            <div className="glass-dark rounded-xl space-y-4 min-w-0  p-5">
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center  space-x-2">
                 <span>📋</span>
                 <span>Bills List</span>
@@ -373,7 +296,7 @@ export default function BillsPage() {
             </div>
 
             {/* Bill Actions */}
-            <div className="space-y-4 min-w-0">
+            <div className="glass-dark rounded-xl space-y-4 min-w-0 p-5">
               <h2 className="text-2xl font-bold text-white mb-4 flex items-center space-x-2">
                 <span>⚡</span>
                 <span>Bill Actions</span>

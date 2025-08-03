@@ -1,5 +1,6 @@
 from . import db
 
+
 class Legislator(db.Model):
     __abstract__ = True
     bioguide_id = db.Column(db.String(7), primary_key=True, nullable=False)
@@ -10,6 +11,7 @@ class Legislator(db.Model):
     photo_url = db.Column(db.String(255))
     term_start = db.Column(db.Date)
     term_end = db.Column(db.Date)
+
 
 class Senator(Legislator):
     __tablename__ = "senators"

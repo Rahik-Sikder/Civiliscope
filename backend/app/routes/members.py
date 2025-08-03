@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+
 from external_api.services import get_member_details
 
 bp = Blueprint("members", __name__, url_prefix="/api/members")

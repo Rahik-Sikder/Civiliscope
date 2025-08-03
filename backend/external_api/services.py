@@ -75,7 +75,7 @@ def get_bills_for_current_congress() -> dict | None:
         congress_number = current_congress_data["congress"]["number"]
 
         # Then get bills for that congress
-        return api.get_bills_for_congress(congress_number)
+        return api.get_bills_for_congress(congress_number, limit=200)
     except Exception as e:
         logger.error(f"Error getting bills for current congress: {e}")
         return None
